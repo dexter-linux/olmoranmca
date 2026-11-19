@@ -22,7 +22,7 @@ ADMIN_PASS = "Ga12ca34ra56$"
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 if not os.path.exists(METADATA_FILE):
-    with open(METADATA_FILE, "w") as f:
+    with open(METADATA_FILE, "w", encoding="utf-8") as f:
         json.dump([], f)
 
 # --- Session State Initialization ---
@@ -31,23 +31,28 @@ if "authenticated" not in st.session_state:
 if "active_page" not in st.session_state:
     st.session_state.active_page = "Home"
 
+
 # --- Helper Functions ---
 def load_gallery():
-    with open(METADATA_FILE, "r") as f:
+    if not os.path.exists(METADATA_FILE):
+        return []
+    with open(METADATA_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 def save_gallery(data):
-    with open(METADATA_FILE, "w") as f:
+    with open(METADATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
+
 
 def save_uploaded_image(uploaded_file, caption, category="Campaign & Community"):
     ext = os.path.splitext(uploaded_file.name)[1].lower()
     unique_filename = f"{uuid.uuid4().hex}{ext}"
     filepath = os.path.join(UPLOAD_DIR, unique_filename)
-    
+
     img = Image.open(uploaded_file)
     img.save(filepath)
-    
+
     gallery_data = load_gallery()
     gallery_data.insert(0, {
         "id": unique_filename,
@@ -58,6 +63,7 @@ def save_uploaded_image(uploaded_file, caption, category="Campaign & Community")
     })
     save_gallery(gallery_data)
 
+
 def delete_image(image_id):
     gallery_data = load_gallery()
     updated_data = [item for item in gallery_data if item["id"] != image_id]
@@ -66,8 +72,8 @@ def delete_image(image_id):
         os.remove(filepath)
     save_gallery(updated_data)
 
+
 def get_hero_bg_css():
-    """Uses local hero_bg.jpg if placed in root folder, otherwise uses a high-res community fallback."""
     local_bg = "hero_bg.jpg"
     if os.path.exists(local_bg):
         with open(local_bg, "rb") as f:
@@ -75,14 +81,14 @@ def get_hero_bg_css():
         return f"url('data:image/jpeg;base64,{b64}')"
     return "url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1920&q=80')"
 
-# --- Custom CSS matching the Screenshot Aesthetic ---
+
+# --- Custom CSS ---
 hero_bg_url = get_hero_bg_css()
 
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800;900&display=swap');
 
-/* Hide default Streamlit chrome */
 #MainMenu {{visibility: hidden;}}
 header {{visibility: hidden;}}
 footer {{visibility: hidden;}}
@@ -99,16 +105,6 @@ footer {{visibility: hidden;}}
     padding-left: 0rem !important;
     padding-right: 0rem !important;
     max-width: 100% !important;
-}}
-
-/* Top Navbar Container */
-.navbar-wrapper {{
-    background-color: #1a1c1e;
-    border-bottom: 1px solid #2c2f33;
-    padding: 0.75rem 3.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }}
 
 .brand-box {{
@@ -144,7 +140,6 @@ footer {{visibility: hidden;}}
     text-transform: uppercase;
 }}
 
-/* Streamlit Nav Buttons Styling */
 div[data-testid="stHorizontalBlock"] .stButton > button {{
     background-color: transparent;
     color: #e2e8f0;
@@ -160,7 +155,6 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {{
     background-color: transparent;
 }}
 
-/* Gold Action Buttons (Login / Admin) */
 .gold-btn > div > button {{
     background-color: #ecc953 !important;
     color: #16181a !important;
@@ -175,7 +169,6 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {{
     color: #16181a !important;
 }}
 
-/* Hero Section */
 .hero-section {{
     position: relative;
     width: 100%;
@@ -253,7 +246,6 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {{
     max-width: 540px;
 }}
 
-/* Inner Content Container */
 .page-container {{
     max-width: 1200px;
     margin: 0 auto;
@@ -322,7 +314,6 @@ with nav_col_links:
     link_cols = st.columns(len(pages))
     for idx, page_name in enumerate(pages):
         with link_cols[idx]:
-            label = f"🟡 {page_name}" if st.session_state.active_page == page_name else page_name
             if st.button(page_name, key=f"nav_{page_name}", use_container_width=True):
                 st.session_state.active_page = page_name
                 st.rerun()
@@ -359,9 +350,7 @@ st.markdown("<hr style='margin: 0; border-color: #2c2f33;'>", unsafe_allow_html=
 # ==========================================
 active = st.session_state.active_page
 
-# ------------------------------------------
-# 1. HOME PAGE (Hero Banner + Quick Summary)
-# ------------------------------------------
+# 1. HOME PAGE
 if active == "Home":
     st.markdown("""
         <div class="hero-section">
@@ -409,9 +398,7 @@ if active == "Home":
         """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ------------------------------------------
 # 2. ABOUT GACHARA
-# ------------------------------------------
 elif active == "About Gachara":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
     st.markdown('<div class="section-kicker">BIOGRAPHY & BACKGROUND</div>', unsafe_allow_html=True)
@@ -443,3 +430,202 @@ elif active == "About Gachara":
             </div>
         """, unsafe_allow_html=True)
     with col_b:
+        st.markdown("""
+            <div class="dark-card">
+                <h4>Core Pillars: Unity, Knowledge & Wealth</h4>
+                <p>
+                    • <strong>Unity:</strong> Fostering inclusive dialogue across every village and community in Ol Moran Ward.<br><br>
+                    • <strong>Knowledge:</strong> Investing in education, digital skills, and youth mentorship.<br><br>
+                    • <strong>Wealth:</strong> Strengthening agricultural value chains, infrastructure, and local enterprise.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# 3. OUR VISION
+elif active == "Our Vision":
+    st.markdown('<div class="page-container">', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker">PEOPLE • PROGRESS • POSSIBILITY</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Our Vision for Ol Moran Ward</div>', unsafe_allow_html=True)
+
+    v1, v2, v3 = st.columns(3)
+    with v1:
+        st.markdown("""
+            <div class="dark-card">
+                <h4>01. Youth & Digital Economy</h4>
+                <p>Equipping young people with practical ICT skills, entrepreneurship support, and access to modern digital work opportunities.</p>
+            </div>
+        """, unsafe_allow_html=True)
+    with v2:
+        st.markdown("""
+            <div class="dark-card">
+                <h4>02. Agricultural & Economic Growth</h4>
+                <p>Applying financial expertise to support cooperative societies, resilient farming practices, and fair market access for local farmers.</p>
+            </div>
+        """, unsafe_allow_html=True)
+    with v3:
+        st.markdown("""
+            <div class="dark-card">
+                <h4>03. Security, Water & Infrastructure</h4>
+                <p>Advocating for reliable water access, rural road connectivity, human-wildlife conflict mitigation, and community safety.</p>
+            </div>
+        """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# 4. ACHIEVEMENTS
+elif active == "Achievements":
+    st.markdown('<div class="page-container">', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker">TRACK RECORD & IMPACT</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Key Milestones & Initiatives</div>', unsafe_allow_html=True)
+
+    a1, a2 = st.columns(2)
+    with a1:
+        st.markdown("""
+            <div class="dark-card">
+                <h4>Technology & Digital Innovation</h4>
+                <p>Designed and deployed modern software platforms, financial analytics workflows, and digital branding initiatives empowering businesses and community organizations.</p>
+            </div>
+        """, unsafe_allow_html=True)
+    with a2:
+        st.markdown("""
+            <div class="dark-card">
+                <h4>Education & Youth Mentorship</h4>
+                <p>Championed academic mentorship and career guidance programs for students across Naiborom and Ol Moran Ward, bridging secondary and tertiary pathways.</p>
+            </div>
+        """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# 5. EVENTS
+elif active == "Events":
+    st.markdown('<div class="page-container">', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker">COMMUNITY ENGAGEMENT</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Upcoming Ward Forums & Events</div>', unsafe_allow_html=True)
+    st.markdown("""
+        <div class="dark-card">
+            <h4>Ol Moran Ward Listening & Youth Empowerment Tour</h4>
+            <p>Join Gachara Ndirangu across Naiborom, Kio, and Wangwachi for open community forums focused on youth employment, agriculture, and ward development priorities. Check the Gallery tab for highlights from recent engagements.</p>
+        </div>
+    """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# 6. GALLERY
+elif active == "Gallery":
+    st.markdown('<div class="page-container">', unsafe_allow_html=True)
+    col_g1, col_g2 = st.columns([4, 1], vertical_alignment="center")
+    with col_g1:
+        st.markdown('<div class="section-kicker">MOMENTS & COMMUNITY ACTION</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-heading">Photo Gallery</div>', unsafe_allow_html=True)
+    with col_g2:
+        if st.session_state.authenticated:
+            if st.button("+ Upload Photos", use_container_width=True):
+                st.session_state.active_page = "Admin"
+                st.rerun()
+
+    gallery_items = load_gallery()
+
+    if not gallery_items:
+        st.info("No photos in the gallery yet. Click 'Login' in the top-right corner to sign in as Admin and upload photos.")
+    else:
+        cols = st.columns(3)
+        for idx, item in enumerate(gallery_items):
+            img_path = os.path.join(UPLOAD_DIR, item["filename"])
+            if os.path.exists(img_path):
+                with cols[idx % 3]:
+                    st.image(img_path, use_container_width=True)
+                    st.markdown(f"""
+                        <div style="background:#1f2226; padding:0.75rem 1rem; border-radius:0 0 6px 6px; border:1px solid #2e3238; border-top:none; margin-bottom:1.5rem;">
+                            <div style="color:#ecc953; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">{item.get('category', 'Gallery')}</div>
+                            <div style="color:#ffffff; font-weight:600; font-size:0.95rem; margin-top:2px;">{item['caption']}</div>
+                            <div style="color:#94a3b8; font-size:0.78rem; margin-top:4px;">{item['uploaded_at']}</div>
+                        </div>
+                    """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# 7. CONTACT / REGISTER
+elif active == "Contact":
+    st.markdown('<div class="page-container">', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker">GET INVOLVED</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Join the Movement</div>', unsafe_allow_html=True)
+
+    with st.form("volunteer_form"):
+        name = st.text_input("Full Name")
+        phone = st.text_input("Phone Number / WhatsApp")
+        area = st.text_input("Village / Polling Station in Ol Moran Ward")
+        message = st.text_area("How would you like to partner or share your ideas?")
+        if st.form_submit_button("Submit"):
+            if name and phone:
+                st.success(f"Thank you, {name}! Your details have been recorded.")
+            else:
+                st.warning("Please enter your name and phone number.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# 8. ADMIN PORTAL
+elif active == "Admin":
+    st.markdown('<div class="page-container">', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker">ADMINISTRATOR ACCESS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Gallery Management Portal</div>', unsafe_allow_html=True)
+
+    if not st.session_state.authenticated:
+        col_spacer1, col_login, col_spacer2 = st.columns([1, 1.5, 1])
+        with col_login:
+            with st.form("admin_login_form"):
+                st.subheader("Sign In")
+                username = st.text_input("Username")
+                password = st.text_input("Password", type="password")
+                submitted = st.form_submit_button("Login", use_container_width=True)
+
+                if submitted:
+                    if username == ADMIN_USER and password == ADMIN_PASS:
+                        st.session_state.authenticated = True
+                        st.rerun()
+                    else:
+                        st.error("Invalid username or password.")
+    else:
+        st.success("Authenticated as Administrator (`admin`).")
+
+        with st.form("upload_gallery_form", clear_on_submit=True):
+            st.subheader("Upload New Photos to Gallery")
+            uploaded_files = st.file_uploader(
+                "Choose photo(s) (JPG, PNG, WEBP)",
+                type=["png", "jpg", "jpeg", "webp"],
+                accept_multiple_files=True
+            )
+            c_cap, c_cat = st.columns([2, 1])
+            with c_cap:
+                caption = st.text_input("Photo Caption", placeholder="e.g., Youth Engagement Forum in Ol Moran")
+            with c_cat:
+                category = st.selectbox(
+                    "Category",
+                    ["Campaign & Community", "Youth & Innovation", "Leadership & Events", "Projects"]
+                )
+
+            upload_submitted = st.form_submit_button("Publish to Gallery")
+            if upload_submitted:
+                if uploaded_files:
+                    for file in uploaded_files:
+                        save_uploaded_image(file, caption, category)
+                    st.success(f"Uploaded {len(uploaded_files)} photo(s) to the Gallery!")
+                    st.rerun()
+                else:
+                    st.warning("Please select at least one photo.")
+
+        st.markdown("---")
+        st.subheader("Manage Published Gallery Photos")
+        current_items = load_gallery()
+        if not current_items:
+            st.info("No photos uploaded yet.")
+        else:
+            for item in current_items:
+                c1, c2, c3 = st.columns([1, 4, 1], vertical_alignment="center")
+                img_path = os.path.join(UPLOAD_DIR, item["filename"])
+                with c1:
+                    if os.path.exists(img_path):
+                        st.image(img_path, width=90)
+                with c2:
+                    st.write(f"**{item['caption']}**")
+                    st.caption(f"{item.get('category', 'Gallery')} • Uploaded {item['uploaded_at']}")
+                with c3:
+                    if st.button("Delete", key=f"del_{item['id']}", use_container_width=True):
+                        delete_image(item["id"])
+                        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
