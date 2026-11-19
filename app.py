@@ -72,7 +72,7 @@ def delete_image(image_id):
     save_gallery(updated_data)
 
 
-# --- Custom CSS (White Body + Black & Gold Theme) ---
+# --- Custom CSS (White Body + Black & Gold + Horizontal Mobile Nav) ---
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -135,6 +135,7 @@ footer {visibility: hidden;}
     font-weight: 800;
     font-size: 0.94rem;
     letter-spacing: -0.2px;
+    white-space: nowrap;
 }
 
 /* Nav Links */
@@ -145,6 +146,7 @@ div[data-testid="stHorizontalBlock"] .stButton > button {
     font-size: 0.86rem;
     font-weight: 600;
     padding: 0.4rem 0.45rem;
+    white-space: nowrap;
     transition: color 0.15s ease;
 }
 
@@ -158,10 +160,11 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     background-color: #ecc953 !important;
     color: #111315 !important;
     font-weight: 700 !important;
-    font-size: 0.92rem !important;
+    font-size: 0.9rem !important;
     border-radius: 8px !important;
-    padding: 0.6rem 1.35rem !important;
+    padding: 0.55rem 1.15rem !important;
     border: 1px solid #d4af37 !important;
+    white-space: nowrap !important;
     transition: all 0.2s ease !important;
 }
 
@@ -175,16 +178,85 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     background-color: #ffffff !important;
     color: #111827 !important;
     font-weight: 600 !important;
-    font-size: 0.92rem !important;
+    font-size: 0.9rem !important;
     border-radius: 8px !important;
-    padding: 0.6rem 1.35rem !important;
+    padding: 0.55rem 1.15rem !important;
     border: 1px solid #d1d5db !important;
+    white-space: nowrap !important;
     transition: all 0.2s ease !important;
 }
 
 .cta-outline > div > button:hover {
     border-color: #111827 !important;
     background-color: #f9fafb !important;
+}
+
+/* FORCE HORIZONTAL NAVIGATION ON MOBILE */
+@media (max-width: 768px) {
+    /* Keep the nav links container horizontal with smooth touch scrolling */
+    div[data-testid="stVerticalBlock"] > div:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        gap: 4px !important;
+        padding: 0.35rem 0.75rem !important;
+        scrollbar-width: none;
+    }
+    div[data-testid="stVerticalBlock"] > div:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"]::-webkit-scrollbar {
+        display: none;
+    }
+    div[data-testid="stVerticalBlock"] > div:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
+        width: auto !important;
+        min-width: fit-content !important;
+        flex: 0 0 auto !important;
+    }
+    div[data-testid="stVerticalBlock"] > div:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"] .stButton > button {
+        padding: 0.35rem 0.65rem !important;
+        font-size: 0.82rem !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 999px !important;
+        background-color: #f9fafb !important;
+    }
+
+    /* Keep top brand + auth buttons horizontal on mobile too */
+    div[data-testid="stVerticalBlock"] > div:has(.mobile-top-marker) + div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0.5rem 0.75rem !important;
+    }
+    div[data-testid="stVerticalBlock"] > div:has(.mobile-top-marker) + div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
+        width: auto !important;
+        flex: 0 0 auto !important;
+    }
+    div[data-testid="stVerticalBlock"] > div:has(.mobile-top-marker) + div[data-testid="stHorizontalBlock"] div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+    }
+    div[data-testid="stVerticalBlock"] > div:has(.mobile-top-marker) + div[data-testid="stHorizontalBlock"] div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
+        width: auto !important;
+        flex: 0 0 auto !important;
+    }
+    .brand-box {
+        padding-left: 0.25rem !important;
+    }
+    .centered-hero {
+        padding: 2.5rem 1.2rem 1.5rem 1.2rem !important;
+    }
+    .showcase-header {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+    }
+    .showcase-body {
+        padding: 1.25rem !important;
+    }
 }
 
 /* Centered Hero Section */
@@ -205,7 +277,7 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
 }
 
 .hero-main-title {
-    font-size: clamp(2.5rem, 5vw, 4.1rem);
+    font-size: clamp(2.2rem, 5vw, 4.1rem);
     font-weight: 800;
     line-height: 1.1;
     letter-spacing: -1.2px;
@@ -220,7 +292,7 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
 
 .hero-subcopy {
     color: #4b5563;
-    font-size: 1.08rem;
+    font-size: 1.05rem;
     line-height: 1.65;
     max-width: 660px;
     margin: 0 auto 2rem auto;
@@ -229,15 +301,17 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
 /* Credential Pill Strip */
 .credential-strip {
     display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     background-color: #f9fafb;
     border: 1px solid #e5e7eb;
     border-radius: 999px;
     padding: 0.45rem 1.1rem;
     margin-top: 1.4rem;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: #1f2937;
 }
 
@@ -281,7 +355,7 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
 .page-container {
     max-width: 1120px;
     margin: 0 auto;
-    padding: 3rem 2rem;
+    padding: 2.5rem 1.5rem;
 }
 
 .section-kicker {
@@ -294,7 +368,7 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
 }
 
 .section-heading {
-    font-size: 2.2rem;
+    font-size: 2rem;
     font-weight: 800;
     letter-spacing: -0.6px;
     color: #111827;
@@ -308,8 +382,9 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     border-radius: 12px;
     padding: 1.65rem;
     height: 100%;
+    margin-bottom: 1rem;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition: border-color 0.2s ease;
 }
 
 .light-card:hover {
@@ -341,29 +416,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. TOP NAVIGATION BAR
+# 2. TOP BRAND & AUTH BAR (Stays Horizontal on Mobile)
 # ==========================================
-nav_brand, nav_links, nav_auth = st.columns([2.0, 5.8, 1.8], vertical_alignment="center")
+st.markdown('<div class="mobile-top-marker"></div>', unsafe_allow_html=True)
+nav_brand, nav_auth = st.columns([3, 1.5], vertical_alignment="center")
 
 with nav_brand:
     st.markdown("""
-        <div style="padding: 0.75rem 0 0.75rem 2rem;" class="brand-box">
+        <div style="padding: 0.65rem 0 0.65rem 1.8rem;" class="brand-box">
             <div class="gn-monogram">GN</div>
             <div class="brand-label">Gachara Ndirangu</div>
         </div>
     """, unsafe_allow_html=True)
 
-with nav_links:
-    pages = ["Home", "Why Gachara", "About", "Our Vision", "Achievements", "Events", "Gallery", "Contact"]
-    link_cols = st.columns(len(pages))
-    for idx, page_name in enumerate(pages):
-        with link_cols[idx]:
-            if st.button(page_name, key=f"nav_{page_name}", use_container_width=True):
-                st.session_state.active_page = page_name
-                st.rerun()
-
 with nav_auth:
-    st.markdown('<div style="padding-right: 1.5rem;">', unsafe_allow_html=True)
+    st.markdown('<div style="padding-right: 1.2rem;">', unsafe_allow_html=True)
     if st.session_state.authenticated:
         c_adm, c_out = st.columns(2)
         with c_adm:
@@ -395,6 +462,20 @@ with nav_auth:
             st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
+st.markdown("<hr style='margin: 0; border-color: #f3f4f6;'>", unsafe_allow_html=True)
+
+# ==========================================
+# 3. HORIZONTAL MENU BAR (Stays Horizontal on Mobile & Desktop)
+# ==========================================
+st.markdown('<div class="mobile-nav-marker"></div>', unsafe_allow_html=True)
+pages = ["Home", "Why Gachara", "About", "Our Vision", "Achievements", "Events", "Gallery", "Contact"]
+link_cols = st.columns(len(pages))
+for idx, page_name in enumerate(pages):
+    with link_cols[idx]:
+        if st.button(page_name, key=f"nav_{page_name}", use_container_width=True):
+            st.session_state.active_page = page_name
+            st.rerun()
+
 st.markdown("<hr style='margin: 0; border-color: #e5e7eb;'>", unsafe_allow_html=True)
 
 # ==========================================
@@ -419,7 +500,7 @@ if active == "Home":
         </div>
     """, unsafe_allow_html=True)
 
-    sp1, btn_col1, btn_col2, btn_col3, sp2 = st.columns([2.3, 1.5, 1.6, 1.3, 2.3], vertical_alignment="center")
+    sp1, btn_col1, btn_col2, btn_col3, sp2 = st.columns([2.2, 1.5, 1.6, 1.4, 2.2], vertical_alignment="center")
     with btn_col1:
         st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
         if st.button("Why Gachara →", key="hero_cta_why", use_container_width=True):
@@ -438,7 +519,7 @@ if active == "Home":
             st.rerun()
 
     st.markdown("""
-        <div style="text-align: center;">
+        <div style="text-align: center; padding: 0 1rem;">
             <div class="credential-strip">
                 <span>B.Com (Finance) • Kenyatta University</span>
                 <span class="pill-badge">CS &amp; IT Specialist</span>
