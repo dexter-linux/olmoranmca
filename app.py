@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import json
 import uuid
+import urllib.parse
 from datetime import datetime
 from PIL import Image
 
@@ -19,16 +20,28 @@ METADATA_FILE = os.path.join(UPLOAD_DIR, "metadata.json")
 ADMIN_USER = "admin"
 ADMIN_PASS = "Ga12ca34ra56$"
 
+PAGES = ["Home", "Why Gachara", "About", "Our Vision", "Achievements", "Events", "Gallery", "Contact"]
+
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 if not os.path.exists(METADATA_FILE):
     with open(METADATA_FILE, "w", encoding="utf-8") as f:
         json.dump([], f)
 
-# --- Session State Initialization ---
+# --- Session State & Query Param Routing ---
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
-if "active_page" not in st.session_state:
+
+query_page = st.query_params.get("page", "Home")
+if query_page in PAGES or query_page == "Admin":
+    st.session_state.active_page = query_page
+elif "active_page" not in st.session_state:
     st.session_state.active_page = "Home"
+
+
+def navigate_to(page_name):
+    st.session_state.active_page = page_name
+    st.query_params["page"] = page_name
+    st.rerun()
 
 
 # --- Helper Functions ---
@@ -72,7 +85,7 @@ def delete_image(image_id):
     save_gallery(updated_data)
 
 
-# --- Custom CSS (White Body + Black & Gold + Horizontal Mobile Nav) ---
+# --- Custom CSS (White Body + Black & Gold + Black Logo & Join Us Buttons) ---
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -95,7 +108,7 @@ footer {visibility: hidden;}
     max-width: 100% !important;
 }
 
-/* Top Announcement Bar (Black & Gold) */
+/* Top Announcement Bar */
 .top-announcement {
     background-color: #111315;
     color: #f4f4f5;
@@ -111,19 +124,42 @@ footer {visibility: hidden;}
     font-weight: 600;
 }
 
-/* Brand Monogram */
+/* Sticky Header + Horizontal Menu Bar */
+.site-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.header-top-row {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0.7rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
 .brand-box {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none !important;
+    flex-shrink: 0;
+    background-color: #111315;
+    padding: 6px 12px 6px 8px;
+    border-radius: 8px;
+    border: 1px solid #1f2226;
 }
 
 .gn-monogram {
-    background-color: #111315;
-    color: #ecc953;
-    border: 1.5px solid #ecc953;
+    background-color: #ecc953;
+    color: #111315;
     font-weight: 800;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     padding: 6px 9px;
     border-radius: 6px;
     letter-spacing: 0.5px;
@@ -131,41 +167,114 @@ footer {visibility: hidden;}
 }
 
 .brand-label {
-    color: #111827;
+    color: #ffffff;
     font-weight: 800;
-    font-size: 0.94rem;
+    font-size: 0.92rem;
     letter-spacing: -0.2px;
     white-space: nowrap;
 }
 
-/* Nav Links */
-div[data-testid="stHorizontalBlock"] .stButton > button {
-    background-color: transparent;
-    color: #374151;
-    border: none;
-    font-size: 0.86rem;
+.auth-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btn-outline-link {
+    display: inline-block;
+    text-decoration: none !important;
+    background-color: #ffffff;
+    color: #111827 !important;
     font-weight: 600;
-    padding: 0.4rem 0.45rem;
+    font-size: 0.84rem;
+    padding: 0.44rem 0.92rem;
+    border-radius: 7px;
+    border: 1px solid #d1d5db;
     white-space: nowrap;
-    transition: color 0.15s ease;
 }
 
-div[data-testid="stHorizontalBlock"] .stButton > button:hover {
-    color: #b8860b;
-    background-color: transparent;
+.btn-outline-link:hover {
+    border-color: #111827;
+    background-color: #f9fafb;
 }
 
-/* Primary Gold CTA Button */
+/* Black Background Join Us / Admin Action Button with Gold Text */
+.btn-black-gold-link {
+    display: inline-block;
+    text-decoration: none !important;
+    background-color: #111315;
+    color: #ecc953 !important;
+    font-weight: 700;
+    font-size: 0.84rem;
+    padding: 0.44rem 0.98rem;
+    border-radius: 7px;
+    border: 1px solid #111315;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+}
+
+.btn-black-gold-link:hover {
+    background-color: #1f2226;
+    border-color: #ecc953;
+}
+
+/* Horizontal Menu Strip (Always Horizontal on Mobile & Desktop) */
+.horizontal-menu-bar {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0.45rem 1.5rem 0.65rem 1.5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.horizontal-menu-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-pill {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    text-decoration: none !important;
+    color: #374151 !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.38rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+}
+
+.nav-pill:hover {
+    color: #111827 !important;
+    background-color: #f3f4f6;
+}
+
+.nav-pill.active {
+    background-color: #111315;
+    color: #ecc953 !important;
+    border-color: #111315;
+}
+
+/* Streamlit Buttons inside Pages */
 .cta-gold > div > button {
     background-color: #ecc953 !important;
     color: #111315 !important;
     font-weight: 700 !important;
-    font-size: 0.9rem !important;
+    font-size: 0.92rem !important;
     border-radius: 8px !important;
-    padding: 0.55rem 1.15rem !important;
+    padding: 0.6rem 1.35rem !important;
     border: 1px solid #d4af37 !important;
-    white-space: nowrap !important;
-    transition: all 0.2s ease !important;
 }
 
 .cta-gold > div > button:hover {
@@ -173,17 +282,14 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     color: #111315 !important;
 }
 
-/* Secondary Black/Outline CTA Button */
 .cta-outline > div > button {
     background-color: #ffffff !important;
     color: #111827 !important;
     font-weight: 600 !important;
-    font-size: 0.9rem !important;
+    font-size: 0.92rem !important;
     border-radius: 8px !important;
-    padding: 0.55rem 1.15rem !important;
+    padding: 0.6rem 1.35rem !important;
     border: 1px solid #d1d5db !important;
-    white-space: nowrap !important;
-    transition: all 0.2s ease !important;
 }
 
 .cta-outline > div > button:hover {
@@ -191,80 +297,12 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     background-color: #f9fafb !important;
 }
 
-/* FORCE HORIZONTAL NAVIGATION ON MOBILE */
-@media (max-width: 768px) {
-    /* Keep the nav links container horizontal with smooth touch scrolling */
-    div[data-testid="stVerticalBlock"] > div:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-        gap: 4px !important;
-        padding: 0.35rem 0.75rem !important;
-        scrollbar-width: none;
-    }
-    div[data-testid="stVerticalBlock"] > div:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"]::-webkit-scrollbar {
-        display: none;
-    }
-    div[data-testid="stVerticalBlock"] > div:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
-        width: auto !important;
-        min-width: fit-content !important;
-        flex: 0 0 auto !important;
-    }
-    div[data-testid="stVerticalBlock"] > div:has(.mobile-nav-marker) + div[data-testid="stHorizontalBlock"] .stButton > button {
-        padding: 0.35rem 0.65rem !important;
-        font-size: 0.82rem !important;
-        border: 1px solid #e5e7eb !important;
-        border-radius: 999px !important;
-        background-color: #f9fafb !important;
-    }
-
-    /* Keep top brand + auth buttons horizontal on mobile too */
-    div[data-testid="stVerticalBlock"] > div:has(.mobile-top-marker) + div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        padding: 0.5rem 0.75rem !important;
-    }
-    div[data-testid="stVerticalBlock"] > div:has(.mobile-top-marker) + div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
-        width: auto !important;
-        flex: 0 0 auto !important;
-    }
-    div[data-testid="stVerticalBlock"] > div:has(.mobile-top-marker) + div[data-testid="stHorizontalBlock"] div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        gap: 6px !important;
-    }
-    div[data-testid="stVerticalBlock"] > div:has(.mobile-top-marker) + div[data-testid="stHorizontalBlock"] div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
-        width: auto !important;
-        flex: 0 0 auto !important;
-    }
-    .brand-box {
-        padding-left: 0.25rem !important;
-    }
-    .centered-hero {
-        padding: 2.5rem 1.2rem 1.5rem 1.2rem !important;
-    }
-    .showcase-header {
-        flex-direction: column;
-        gap: 4px;
-        text-align: center;
-    }
-    .showcase-body {
-        padding: 1.25rem !important;
-    }
-}
-
 /* Centered Hero Section */
 .centered-hero {
     max-width: 860px;
     margin: 0 auto;
     text-align: center;
-    padding: 4.2rem 1.5rem 1.8rem 1.5rem;
+    padding: 4rem 1.5rem 1.6rem 1.5rem;
 }
 
 .hero-eyebrow {
@@ -341,13 +379,15 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     color: #d1d5db;
     padding: 0.85rem 1.5rem;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
     font-size: 0.82rem;
 }
 
 .showcase-body {
-    padding: 2.2rem 2.5rem;
+    padding: 2rem 2rem;
     background-color: #fafafa;
 }
 
@@ -384,11 +424,6 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     height: 100%;
     margin-bottom: 1rem;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    transition: border-color 0.2s ease;
-}
-
-.light-card:hover {
-    border-color: #111315;
 }
 
 .light-card h4 {
@@ -403,6 +438,31 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     font-size: 0.94rem;
     line-height: 1.6;
 }
+
+@media (max-width: 768px) {
+    .header-top-row {
+        padding: 0.6rem 0.9rem;
+    }
+    .brand-box {
+        padding: 5px 9px 5px 6px;
+    }
+    .brand-label {
+        font-size: 0.82rem;
+    }
+    .btn-outline-link, .btn-black-gold-link {
+        padding: 0.38rem 0.72rem;
+        font-size: 0.78rem;
+    }
+    .horizontal-menu-bar {
+        padding: 0.35rem 0.9rem 0.55rem 0.9rem;
+    }
+    .centered-hero {
+        padding: 2.5rem 1.1rem 1.4rem 1.1rem;
+    }
+    .showcase-body {
+        padding: 1.15rem;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -411,77 +471,51 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
 # ==========================================
 st.markdown("""
     <div class="top-announcement">
-        🟡 Ol Moran Ward Development Initiative &nbsp;•&nbsp; Unity, Knowledge &amp; Wealth &nbsp;<span>Explore Our Vision →</span>
+        🟡 Ol Moran Ward Development Initiative &nbsp;•&nbsp; Unity, Knowledge &amp; Wealth &nbsp;<span><a href="?page=Our+Vision" target="_self" style="color:#ecc953; text-decoration:none;">Explore Our Vision →</a></span>
     </div>
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. TOP BRAND & AUTH BAR (Stays Horizontal on Mobile)
+# 2. STICKY HEADER + SINGLE-ROW HORIZONTAL MENU
 # ==========================================
-st.markdown('<div class="mobile-top-marker"></div>', unsafe_allow_html=True)
-nav_brand, nav_auth = st.columns([3, 1.5], vertical_alignment="center")
+active = st.session_state.active_page
 
-with nav_brand:
-    st.markdown("""
-        <div style="padding: 0.65rem 0 0.65rem 1.8rem;" class="brand-box">
-            <div class="gn-monogram">GN</div>
-            <div class="brand-label">Gachara Ndirangu</div>
+menu_links_html = ""
+for page_name in PAGES:
+    encoded_page = urllib.parse.quote(page_name)
+    active_class = "nav-pill active" if active == page_name else "nav-pill"
+    menu_links_html += f'<a class="{active_class}" href="?page={encoded_page}" target="_self">{page_name}</a>'
+
+if st.session_state.authenticated:
+    auth_links_html = """
+        <a class="btn-black-gold-link" href="?page=Admin" target="_self">Admin</a>
+    """
+else:
+    auth_links_html = """
+        <a class="btn-outline-link" href="?page=Admin" target="_self">Login</a>
+        <a class="btn-black-gold-link" href="?page=Contact" target="_self">Join Us / Register</a>
+    """
+
+st.markdown(f"""
+    <div class="site-header">
+        <div class="header-top-row">
+            <a class="brand-box" href="?page=Home" target="_self">
+                <div class="gn-monogram">GN</div>
+                <div class="brand-label">Gachara Ndirangu</div>
+            </a>
+            <div class="auth-actions">
+                {auth_links_html}
+            </div>
         </div>
-    """, unsafe_allow_html=True)
-
-with nav_auth:
-    st.markdown('<div style="padding-right: 1.2rem;">', unsafe_allow_html=True)
-    if st.session_state.authenticated:
-        c_adm, c_out = st.columns(2)
-        with c_adm:
-            st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
-            if st.button("Admin", key="nav_admin_panel", use_container_width=True):
-                st.session_state.active_page = "Admin"
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-        with c_out:
-            st.markdown('<div class="cta-outline">', unsafe_allow_html=True)
-            if st.button("Logout", key="nav_logout_btn", use_container_width=True):
-                st.session_state.authenticated = False
-                st.session_state.active_page = "Home"
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-    else:
-        c_log, c_reg = st.columns(2)
-        with c_log:
-            st.markdown('<div class="cta-outline">', unsafe_allow_html=True)
-            if st.button("Login", key="nav_login_btn", use_container_width=True):
-                st.session_state.active_page = "Admin"
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-        with c_reg:
-            st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
-            if st.button("Join Us", key="nav_register_btn", use_container_width=True):
-                st.session_state.active_page = "Contact"
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown("<hr style='margin: 0; border-color: #f3f4f6;'>", unsafe_allow_html=True)
-
-# ==========================================
-# 3. HORIZONTAL MENU BAR (Stays Horizontal on Mobile & Desktop)
-# ==========================================
-st.markdown('<div class="mobile-nav-marker"></div>', unsafe_allow_html=True)
-pages = ["Home", "Why Gachara", "About", "Our Vision", "Achievements", "Events", "Gallery", "Contact"]
-link_cols = st.columns(len(pages))
-for idx, page_name in enumerate(pages):
-    with link_cols[idx]:
-        if st.button(page_name, key=f"nav_{page_name}", use_container_width=True):
-            st.session_state.active_page = page_name
-            st.rerun()
-
-st.markdown("<hr style='margin: 0; border-color: #e5e7eb;'>", unsafe_allow_html=True)
+        <div class="horizontal-menu-bar">
+            {menu_links_html}
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 
 # ==========================================
 # PAGE ROUTING
 # ==========================================
-active = st.session_state.active_page
 
 # ------------------------------------------
 # HOME PAGE
@@ -504,19 +538,16 @@ if active == "Home":
     with btn_col1:
         st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
         if st.button("Why Gachara →", key="hero_cta_why", use_container_width=True):
-            st.session_state.active_page = "Why Gachara"
-            st.rerun()
+            navigate_to("Why Gachara")
         st.markdown('</div>', unsafe_allow_html=True)
     with btn_col2:
         st.markdown('<div class="cta-outline">', unsafe_allow_html=True)
         if st.button("Explore Our Vision", key="hero_cta_vision", use_container_width=True):
-            st.session_state.active_page = "Our Vision"
-            st.rerun()
+            navigate_to("Our Vision")
         st.markdown('</div>', unsafe_allow_html=True)
     with btn_col3:
         if st.button("View Gallery →", key="hero_cta_gallery", use_container_width=True):
-            st.session_state.active_page = "Gallery"
-            st.rerun()
+            navigate_to("Gallery")
 
     st.markdown("""
         <div style="text-align: center; padding: 0 1rem;">
@@ -732,8 +763,7 @@ elif active == "Gallery":
         if st.session_state.authenticated:
             st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
             if st.button("+ Upload Photos", use_container_width=True):
-                st.session_state.active_page = "Admin"
-                st.rerun()
+                navigate_to("Admin")
             st.markdown('</div>', unsafe_allow_html=True)
 
     gallery_items = load_gallery()
@@ -757,21 +787,21 @@ elif active == "Gallery":
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ------------------------------------------
-# CONTACT PAGE
+# CONTACT / REGISTER PAGE
 # ------------------------------------------
 elif active == "Contact":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
     st.markdown('<div class="section-kicker">GET INVOLVED</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-heading">Join the Movement</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Join Us / Register</div>', unsafe_allow_html=True)
 
     with st.form("volunteer_form"):
         name = st.text_input("Full Name")
         phone = st.text_input("Phone Number / WhatsApp")
         area = st.text_input("Village / Polling Station in Ol Moran Ward")
         message = st.text_area("How would you like to collaborate or share your feedback?")
-        if st.form_submit_button("Submit"):
+        if st.form_submit_button("Register"):
             if name and phone:
-                st.success(f"Thank you, {name}! Your message has been received.")
+                st.success(f"Thank you, {name}! Your registration has been received.")
             else:
                 st.warning("Please provide your name and phone number.")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -800,7 +830,13 @@ elif active == "Admin":
                     else:
                         st.error("Invalid username or password.")
     else:
-        st.success("Authenticated as Administrator (`admin`).")
+        col_s1, col_s2 = st.columns([5, 1], vertical_alignment="center")
+        with col_s1:
+            st.success("Authenticated as Administrator (`admin`).")
+        with col_s2:
+            if st.button("Logout", key="admin_logout_btn", use_container_width=True):
+                st.session_state.authenticated = False
+                navigate_to("Home")
 
         with st.form("upload_gallery_form", clear_on_submit=True):
             st.subheader("Upload New Photos to Gallery")
