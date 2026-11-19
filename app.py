@@ -2,7 +2,6 @@ import streamlit as st
 import os
 import json
 import uuid
-import base64
 from datetime import datetime
 from PIL import Image
 
@@ -30,6 +29,8 @@ if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "active_page" not in st.session_state:
     st.session_state.active_page = "Home"
+if "showcase_tab" not in st.session_state:
+    st.session_state.showcase_tab = "Finance & Strategy"
 
 
 # --- Helper Functions ---
@@ -73,244 +74,288 @@ def delete_image(image_id):
     save_gallery(updated_data)
 
 
-def get_hero_bg_css():
-    local_bg = "hero_bg.jpg"
-    if os.path.exists(local_bg):
-        with open(local_bg, "rb") as f:
-            b64 = base64.b64encode(f.read()).decode()
-        return f"url('data:image/jpeg;base64,{b64}')"
-    return "url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1920&q=80')"
-
-
-# --- Custom CSS ---
-hero_bg_url = get_hero_bg_css()
-
-st.markdown(f"""
+# --- Custom CSS (Black & Gold + Centered Modern Layout) ---
+st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-#MainMenu {{visibility: hidden;}}
-header {{visibility: hidden;}}
-footer {{visibility: hidden;}}
+#MainMenu {visibility: hidden;}
+header {visibility: hidden;}
+footer {visibility: hidden;}
 
-.stApp {{
-    background-color: #16181a;
-    color: #f4f4f4;
-    font-family: 'Inter', sans-serif;
-}}
+.stApp {
+    background-color: #0d0e10;
+    color: #f4f4f5;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
 
-.block-container {{
+.block-container {
     padding-top: 0rem !important;
-    padding-bottom: 2rem !important;
+    padding-bottom: 3rem !important;
     padding-left: 0rem !important;
     padding-right: 0rem !important;
     max-width: 100% !important;
-}}
+}
 
-.brand-box {{
+/* Top Announcement Bar */
+.top-announcement {
+    background-color: #181a1f;
+    border-bottom: 1px solid #272a30;
+    color: #e4e4e7;
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 0.55rem 1rem;
+    letter-spacing: 0.2px;
+}
+
+.top-announcement span {
+    color: #ecc953;
+    font-weight: 600;
+}
+
+/* Brand Monogram */
+.brand-box {
     display: flex;
     align-items: center;
-    gap: 14px;
-}}
+    gap: 10px;
+}
 
-.gn-monogram {{
-    border: 1.5px solid #ecc953;
-    color: #ecc953;
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 1.15rem;
-    padding: 6px 10px;
-    letter-spacing: 1px;
+.gn-monogram {
+    background-color: #ecc953;
+    color: #0d0e10;
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 6px 9px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
     line-height: 1;
-}}
+}
 
-.brand-text-top {{
+.brand-label {
     color: #ffffff;
     font-weight: 700;
     font-size: 0.92rem;
-    letter-spacing: 0.5px;
-    line-height: 1.2;
-}}
+    letter-spacing: -0.2px;
+}
 
-.brand-text-sub {{
-    color: #ecc953;
-    font-weight: 600;
-    font-size: 0.68rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-}}
-
-div[data-testid="stHorizontalBlock"] .stButton > button {{
+/* Nav Links */
+div[data-testid="stHorizontalBlock"] .stButton > button {
     background-color: transparent;
-    color: #e2e8f0;
+    color: #d4d4d8;
     border: none;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     font-weight: 500;
-    padding: 0.4rem 0.6rem;
-    transition: color 0.2s ease;
-}}
+    padding: 0.4rem 0.45rem;
+    transition: color 0.15s ease;
+}
 
-div[data-testid="stHorizontalBlock"] .stButton > button:hover {{
+div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     color: #ecc953;
     background-color: transparent;
-}}
+}
 
-.gold-btn > div > button {{
+/* Primary Gold CTA Button */
+.cta-gold > div > button {
     background-color: #ecc953 !important;
-    color: #16181a !important;
+    color: #0d0e10 !important;
     font-weight: 600 !important;
-    border-radius: 4px !important;
-    padding: 0.45rem 1.2rem !important;
-    border: none !important;
-}}
+    font-size: 0.92rem !important;
+    border-radius: 8px !important;
+    padding: 0.6rem 1.35rem !important;
+    border: 1px solid #ecc953 !important;
+    transition: all 0.2s ease !important;
+}
 
-.gold-btn > div > button:hover {{
-    background-color: #f6d870 !important;
-    color: #16181a !important;
-}}
+.cta-gold > div > button:hover {
+    background-color: #f5d76e !important;
+    border-color: #f5d76e !important;
+}
 
-.hero-section {{
-    position: relative;
-    width: 100%;
-    min-height: 82vh;
-    background-image: linear-gradient(
-        90deg,
-        rgba(20, 22, 24, 0.92) 0%,
-        rgba(24, 27, 30, 0.78) 52%,
-        rgba(24, 27, 30, 0.55) 100%
-    ), {hero_bg_url};
-    background-size: cover;
-    background-position: center right;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 4rem 5rem;
-}}
+/* Secondary Outline CTA Button */
+.cta-outline > div > button {
+    background-color: #16181d !important;
+    color: #f4f4f5 !important;
+    font-weight: 600 !important;
+    font-size: 0.92rem !important;
+    border-radius: 8px !important;
+    padding: 0.6rem 1.35rem !important;
+    border: 1px solid #32363f !important;
+    transition: all 0.2s ease !important;
+}
 
-.hero-kicker {{
+.cta-outline > div > button:hover {
+    border-color: #ecc953 !important;
+    color: #ecc953 !important;
+}
+
+/* Centered Hero Section */
+.centered-hero {
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 4.5rem 1.5rem 2rem 1.5rem;
+}
+
+.hero-eyebrow {
     color: #ecc953;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 2.2px;
     text-transform: uppercase;
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}}
+    margin-bottom: 1.1rem;
+}
 
-.hero-dot {{
-    height: 7px;
-    width: 7px;
-    background-color: #ecc953;
-    border-radius: 50%;
-    display: inline-block;
-}}
-
-.hero-headline {{
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(2.8rem, 5.2vw, 4.7rem);
+.hero-main-title {
+    font-size: clamp(2.5rem, 5vw, 4.1rem);
     font-weight: 800;
-    line-height: 1.04;
+    line-height: 1.1;
+    letter-spacing: -1.2px;
     color: #ffffff;
-    text-transform: uppercase;
-    margin-bottom: 1.8rem;
-    max-width: 760px;
-}}
+    margin-bottom: 1.3rem;
+}
 
-.hero-headline .gold-accent {{
+.hero-main-title .gold-line {
     color: #ecc953;
     display: block;
-}}
+}
 
-.hero-candidate-name {{
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 0.25rem;
-}}
+.hero-subcopy {
+    color: #a1a1aa;
+    font-size: 1.08rem;
+    line-height: 1.65;
+    max-width: 660px;
+    margin: 0 auto 2rem auto;
+}
 
-.hero-candidate-role {{
-    color: #ecc953;
+/* Credential Pill Strip (Mirrors pip install badge strip) */
+.credential-strip {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #14161a;
+    border: 1px solid #272a30;
+    border-radius: 999px;
+    padding: 0.45rem 1.1rem;
+    margin-top: 1.4rem;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 1.8px;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-}}
+    color: #d4d4d8;
+}
 
-.hero-tagline {{
-    color: #d1d5db;
-    font-size: 1.02rem;
-    line-height: 1.6;
-    max-width: 540px;
-}}
+.pill-badge {
+    background-color: rgba(236, 201, 83, 0.14);
+    color: #ecc953;
+    border: 1px solid rgba(236, 201, 83, 0.35);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.74rem;
+}
 
-.page-container {{
-    max-width: 1200px;
+/* Framed App/Preview Window */
+.showcase-frame {
+    max-width: 1020px;
+    margin: 2.5rem auto 0 auto;
+    background-color: #14161a;
+    border: 1px solid #272a30;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.showcase-header {
+    background-color: #1a1d23;
+    border-bottom: 1px solid #272a30;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: #a1a1aa;
+}
+
+.showcase-body {
+    padding: 2.2rem 2.5rem;
+}
+
+/* Standard Inner Page Container */
+.page-container {
+    max-width: 1120px;
     margin: 0 auto;
-    padding: 3rem 2.5rem;
-}}
+    padding: 3rem 2rem;
+}
 
-.section-kicker {{
+.section-kicker {
     color: #ecc953;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 0.5rem;
-}}
+    margin-bottom: 0.45rem;
+}
 
-.section-heading {{
-    font-family: 'Playfair Display', serif;
-    font-size: 2.4rem;
+.section-heading {
+    font-size: 2.2rem;
     font-weight: 800;
+    letter-spacing: -0.6px;
     color: #ffffff;
     margin-bottom: 1.5rem;
-}}
+}
 
-.dark-card {{
-    background-color: #1f2226;
-    border: 1px solid #2e3238;
-    border-top: 3px solid #ecc953;
-    border-radius: 6px;
-    padding: 1.75rem;
+.dark-card {
+    background-color: #14161a;
+    border: 1px solid #272a30;
+    border-radius: 12px;
+    padding: 1.65rem;
     height: 100%;
-}}
+    transition: border-color 0.2s ease;
+}
 
-.dark-card h4 {{
+.dark-card:hover {
+    border-color: #ecc953;
+}
+
+.dark-card h4 {
     color: #ecc953;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-}}
+    font-size: 1.12rem;
+    font-weight: 700;
+    margin-bottom: 0.65rem;
+}
 
-.dark-card p {{
-    color: #cbd5e1;
-    font-size: 0.95rem;
+.dark-card p {
+    color: #a1a1aa;
+    font-size: 0.94rem;
     line-height: 1.6;
-}}
+}
 </style>
 """, unsafe_allow_html=True)
 
 # ==========================================
-# TOP NAVIGATION BAR
+# 1. TOP ANNOUNCEMENT BANNER
 # ==========================================
-nav_col_brand, nav_col_links, nav_col_auth = st.columns([2.4, 5.2, 1.8], vertical_alignment="center")
+st.markdown("""
+    <div class="top-announcement">
+        🟡 Ol Moran Ward Development Initiative &nbsp;•&nbsp; Unity, Knowledge & Wealth &nbsp;<span>Explore Our Vision →</span>
+    </div>
+""", unsafe_allow_html=True)
 
-with nav_col_brand:
+# ==========================================
+# 2. TOP NAVIGATION BAR (Includes "Why Gachara")
+# ==========================================
+nav_brand, nav_links, nav_auth = st.columns([2.0, 5.8, 1.8], vertical_alignment="center")
+
+with nav_brand:
     st.markdown("""
-        <div style="padding: 0.8rem 0 0.8rem 2.5rem;" class="brand-box">
+        <div style="padding: 0.75rem 0 0.75rem 2rem;" class="brand-box">
             <div class="gn-monogram">GN</div>
-            <div>
-                <div class="brand-text-top">GACHARA NDIRANGU</div>
-                <div class="brand-text-sub">OL MORAN WARD</div>
-            </div>
+            <div class="brand-label">Gachara Ndirangu</div>
         </div>
     """, unsafe_allow_html=True)
 
-with nav_col_links:
-    pages = ["Home", "About Gachara", "Our Vision", "Achievements", "Events", "Gallery", "Contact"]
+with nav_links:
+    pages = ["Home", "Why Gachara", "About", "Our Vision", "Achievements", "Events", "Gallery", "Contact"]
     link_cols = st.columns(len(pages))
     for idx, page_name in enumerate(pages):
         with link_cols[idx]:
@@ -318,99 +363,182 @@ with nav_col_links:
                 st.session_state.active_page = page_name
                 st.rerun()
 
-with nav_col_auth:
-    st.markdown('<div class="gold-btn" style="padding-right: 2rem;">', unsafe_allow_html=True)
+with nav_auth:
+    st.markdown('<div style="padding-right: 1.5rem;">', unsafe_allow_html=True)
     if st.session_state.authenticated:
         c_adm, c_out = st.columns(2)
         with c_adm:
+            st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
             if st.button("Admin", key="nav_admin_panel", use_container_width=True):
                 st.session_state.active_page = "Admin"
                 st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
         with c_out:
+            st.markdown('<div class="cta-outline">', unsafe_allow_html=True)
             if st.button("Logout", key="nav_logout_btn", use_container_width=True):
                 st.session_state.authenticated = False
                 st.session_state.active_page = "Home"
                 st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
     else:
         c_log, c_reg = st.columns(2)
         with c_log:
+            st.markdown('<div class="cta-outline">', unsafe_allow_html=True)
             if st.button("Login", key="nav_login_btn", use_container_width=True):
                 st.session_state.active_page = "Admin"
                 st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
         with c_reg:
-            if st.button("Register", key="nav_register_btn", use_container_width=True):
+            st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
+            if st.button("Join Us", key="nav_register_btn", use_container_width=True):
                 st.session_state.active_page = "Contact"
                 st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown("<hr style='margin: 0; border-color: #2c2f33;'>", unsafe_allow_html=True)
+st.markdown("<hr style='margin: 0; border-color: #1f2228;'>", unsafe_allow_html=True)
 
 # ==========================================
 # PAGE ROUTING
 # ==========================================
 active = st.session_state.active_page
 
-# 1. HOME PAGE
+# ------------------------------------------
+# HOME PAGE (Centered Hero + Dual CTAs + Framed Showcase)
+# ------------------------------------------
 if active == "Home":
     st.markdown("""
-        <div class="hero-section">
-            <div class="hero-kicker">
-                <span class="hero-dot"></span> PEOPLE &nbsp;•&nbsp; PROGRESS &nbsp;•&nbsp; POSSIBILITY
+        <div class="centered-hero">
+            <div class="hero-eyebrow">FINANCE • COMPUTER SCIENCE • STRATEGIC LEADERSHIP</div>
+            <div class="hero-main-title">
+                A Stronger Ol Moran.
+                <span class="gold-line">Built on Finance &amp; Technology.</span>
             </div>
-            <div class="hero-headline">
-                A STRONGER
-                <span class="gold-accent">OL MORAN</span>
-                STARTS WITH US.
-            </div>
-            <div class="hero-candidate-name">Gachara Ndirangu</div>
-            <div class="hero-candidate-role">MCA ASPIRANT • OL MORAN WARD</div>
-            <div class="hero-tagline">
-                Unity, Knowledge and Wealth. A shared commitment to listening, working together and building opportunities across our ward.
+            <div class="hero-subcopy">
+                David Gachara Ndirangu combines financial discipline from Kenyatta University with advanced expertise in Computer Science &amp; IT to drive transparent governance, digital innovation, and sustainable opportunity across Ol Moran Ward.
             </div>
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="page-container">', unsafe_allow_html=True)
-    st.markdown('<div class="section-kicker">LEADERSHIP & EXPERTISE</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-heading">Multidisciplinary Vision for Ol Moran</div>', unsafe_allow_html=True)
+    # Centered Dual CTA Buttons
+    sp1, btn_col1, btn_col2, btn_col3, sp2 = st.columns([2.3, 1.5, 1.6, 1.3, 2.3], vertical_alignment="center")
+    with btn_col1:
+        st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
+        if st.button("Why Gachara →", key="hero_cta_why", use_container_width=True):
+            st.session_state.active_page = "Why Gachara"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    with btn_col2:
+        st.markdown('<div class="cta-outline">', unsafe_allow_html=True)
+        if st.button("Explore Our Vision", key="hero_cta_vision", use_container_width=True):
+            st.session_state.active_page = "Our Vision"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    with btn_col3:
+        if st.button("View Gallery →", key="hero_cta_gallery", use_container_width=True):
+            st.session_state.active_page = "Gallery"
+            st.rerun()
 
-    c1, c2, c3 = st.columns(3)
-    with c1:
+    # Centered Credential Pill Strip (mirrors the `pip install streamlit | Open source` bar)
+    st.markdown("""
+        <div style="text-align: center;">
+            <div class="credential-strip">
+                <span>B.Com (Finance) • Kenyatta University</span>
+                <span class="pill-badge">CS &amp; IT Specialist</span>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Framed Interactive Preview Box (mirrors the bottom preview card in the screenshot)
+    st.markdown("""
+        <div class="showcase-frame">
+            <div class="showcase-header">
+                <div>📄 <strong style="color:#ffffff;">gachara_ndirangu.profile</strong> &nbsp;•&nbsp; Ol Moran Ward, Laikipia</div>
+                <div>Naiborom Primary &nbsp;→&nbsp; Alliance High School &nbsp;→&nbsp; Kenyatta University</div>
+            </div>
+            <div class="showcase-body">
+    """, unsafe_allow_html=True)
+
+    sc1, sc2, sc3 = st.columns(3)
+    with sc1:
         st.markdown("""
             <div class="dark-card">
-                <h4>Finance & Resource Stewardship</h4>
-                <p>Holding a Bachelor of Commerce (Finance) from Kenyatta University, David Gachara Ndirangu brings disciplined budgeting, transparent allocation, and economic empowerment to community development.</p>
+                <h4>📊 Financial Acumen</h4>
+                <p>Bachelor of Commerce (Finance) training applied to transparent ward budgeting, resource accountability, and local cooperative growth.</p>
             </div>
         """, unsafe_allow_html=True)
-    with c2:
+    with sc2:
         st.markdown("""
             <div class="dark-card">
-                <h4>Computer Science & Technology</h4>
-                <p>With advanced training in Computer Science & IT, he champions digital literacy, youth innovation hubs, and modern technology adoption to unlock new opportunities across Ol Moran Ward.</p>
+                <h4>💻 Computer Science &amp; IT</h4>
+                <p>Modern software engineering, data-driven decision-making, and digital skills empowerment for youth and local enterprises.</p>
             </div>
         """, unsafe_allow_html=True)
-    with c3:
+    with sc3:
         st.markdown("""
             <div class="dark-card">
-                <h4>Rooted in Excellence</h4>
-                <p>An alumnus of Naiborom Primary School and Alliance High School, his leadership combines local grassroots understanding with strategic national-level problem solving.</p>
+                <h4>🤝 Impactful Leadership</h4>
+                <p>Rooted in Naiborom Primary and Alliance High School values—listening closely and delivering practical infrastructure and security solutions.</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("</div></div>", unsafe_allow_html=True)
+
+# ------------------------------------------
+# WHY GACHARA PAGE
+# ------------------------------------------
+elif active == "Why Gachara":
+    st.markdown('<div class="page-container">', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker">THE CASE FOR MULTIDISCIPLINARY LEADERSHIP</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Why Gachara Ndirangu?</div>', unsafe_allow_html=True)
+
+    st.markdown("""
+        <div class="dark-card" style="margin-bottom: 2rem;">
+            <p style="font-size: 1.06rem; color: #f4f4f5;">
+                Modern ward representation demands more than promises—it requires <strong>financial literacy</strong> to manage public funds responsibly and <strong>technological fluency</strong> to connect residents to modern economic opportunities. David Gachara Ndirangu brings both.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    w1, w2, w3 = st.columns(3)
+    with w1:
+        st.markdown("""
+            <div class="dark-card">
+                <h4>1. Proven Financial Discipline</h4>
+                <p>With a Bachelor of Commerce (Finance) from Kenyatta University, every project is evaluated for cost-effectiveness, transparency, and measurable community return.</p>
+            </div>
+        """, unsafe_allow_html=True)
+    with w2:
+        st.markdown("""
+            <div class="dark-card">
+                <h4>2. Future-Ready Tech Adoption</h4>
+                <p>Advanced Computer Science &amp; IT expertise enables smarter service delivery, digital literacy programs for youth, and data-backed planning for water and agriculture.</p>
+            </div>
+        """, unsafe_allow_html=True)
+    with w3:
+        st.markdown("""
+            <div class="dark-card">
+                <h4>3. Deep Local Roots</h4>
+                <p>Educated at Naiborom Primary School and Alliance High School, he understands the everyday realities of Ol Moran families and brings national-caliber leadership home.</p>
             </div>
         """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 2. ABOUT GACHARA
-elif active == "About Gachara":
+# ------------------------------------------
+# ABOUT PAGE
+# ------------------------------------------
+elif active == "About":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
-    st.markdown('<div class="section-kicker">BIOGRAPHY & BACKGROUND</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker">BIOGRAPHY &amp; CREDENTIALS</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-heading">About David Gachara Ndirangu</div>', unsafe_allow_html=True)
 
     st.markdown("""
         <div class="dark-card" style="margin-bottom: 2rem;">
-            <p style="font-size: 1.08rem; color: #f1f5f9;">
+            <p style="font-size: 1.08rem; color: #f4f4f5;">
                 <strong>David Gachara Ndirangu</strong> is a multidisciplinary professional with expertise spanning finance, computer science, and technology. 
                 An alumnus of <strong>Naiborom Primary School</strong> and <strong>Alliance High School</strong>, he holds a 
                 <strong>Bachelor of Commerce (Finance)</strong> from <strong>Kenyatta University</strong> and advanced training in 
-                <strong>Computer Science & IT</strong>. His unique combination of financial acumen and technical expertise enables him 
+                <strong>Computer Science &amp; IT</strong>. His unique combination of financial acumen and technical expertise enables him 
                 to drive strategic decision-making, technological adoption, and impactful leadership.
             </p>
         </div>
@@ -420,11 +548,11 @@ elif active == "About Gachara":
     with col_a:
         st.markdown("""
             <div class="dark-card">
-                <h4>Academic Foundation</h4>
+                <h4>Education &amp; Training</h4>
                 <p>
                     • <strong>Kenyatta University:</strong> Bachelor of Commerce (Finance)<br><br>
-                    • <strong>Computer Science & IT:</strong> Advanced Technical & Systems Training<br><br>
-                    • <strong>Alliance High School:</strong> Secondary Education<br><br>
+                    • <strong>Computer Science &amp; IT:</strong> Advanced Software, Data &amp; Systems Training<br><br>
+                    • <strong>Alliance High School:</strong> Kenya Certificate of Secondary Education<br><br>
                     • <strong>Naiborom Primary School:</strong> Primary Education (Ol Moran Ward)
                 </p>
             </div>
@@ -432,94 +560,104 @@ elif active == "About Gachara":
     with col_b:
         st.markdown("""
             <div class="dark-card">
-                <h4>Core Pillars: Unity, Knowledge & Wealth</h4>
+                <h4>Core Leadership Values</h4>
                 <p>
-                    • <strong>Unity:</strong> Fostering inclusive dialogue across every village and community in Ol Moran Ward.<br><br>
-                    • <strong>Knowledge:</strong> Investing in education, digital skills, and youth mentorship.<br><br>
-                    • <strong>Wealth:</strong> Strengthening agricultural value chains, infrastructure, and local enterprise.
+                    • <strong>Unity:</strong> Bringing every community across Ol Moran Ward together around shared goals.<br><br>
+                    • <strong>Knowledge:</strong> Expanding access to quality education, ICT training, and youth mentorship.<br><br>
+                    • <strong>Wealth:</strong> Unlocking agricultural value chains, market access, and local enterprise.
                 </p>
             </div>
         """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 3. OUR VISION
+# ------------------------------------------
+# OUR VISION PAGE
+# ------------------------------------------
 elif active == "Our Vision":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
     st.markdown('<div class="section-kicker">PEOPLE • PROGRESS • POSSIBILITY</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-heading">Our Vision for Ol Moran Ward</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Strategic Vision for Ol Moran Ward</div>', unsafe_allow_html=True)
 
     v1, v2, v3 = st.columns(3)
     with v1:
         st.markdown("""
             <div class="dark-card">
-                <h4>01. Youth & Digital Economy</h4>
-                <p>Equipping young people with practical ICT skills, entrepreneurship support, and access to modern digital work opportunities.</p>
+                <h4>01. Youth &amp; Digital Economy</h4>
+                <p>Establishing ICT empowerment hubs, coding and digital skills bootcamps, and youth enterprise support across the ward.</p>
             </div>
         """, unsafe_allow_html=True)
     with v2:
         st.markdown("""
             <div class="dark-card">
-                <h4>02. Agricultural & Economic Growth</h4>
-                <p>Applying financial expertise to support cooperative societies, resilient farming practices, and fair market access for local farmers.</p>
+                <h4>02. Agricultural Resilience</h4>
+                <p>Strengthening farmer cooperatives, water harvesting, and fair market linkages using sound financial planning.</p>
             </div>
         """, unsafe_allow_html=True)
     with v3:
         st.markdown("""
             <div class="dark-card">
-                <h4>03. Security, Water & Infrastructure</h4>
-                <p>Advocating for reliable water access, rural road connectivity, human-wildlife conflict mitigation, and community safety.</p>
+                <h4>03. Security &amp; Infrastructure</h4>
+                <p>Championing passable rural roads, reliable water points, solar lighting, and human-wildlife conflict mitigation.</p>
             </div>
         """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 4. ACHIEVEMENTS
+# ------------------------------------------
+# ACHIEVEMENTS PAGE
+# ------------------------------------------
 elif active == "Achievements":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
-    st.markdown('<div class="section-kicker">TRACK RECORD & IMPACT</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-heading">Key Milestones & Initiatives</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker">TRACK RECORD</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Key Milestones &amp; Initiatives</div>', unsafe_allow_html=True)
 
     a1, a2 = st.columns(2)
     with a1:
         st.markdown("""
             <div class="dark-card">
-                <h4>Technology & Digital Innovation</h4>
-                <p>Designed and deployed modern software platforms, financial analytics workflows, and digital branding initiatives empowering businesses and community organizations.</p>
+                <h4>Technology &amp; Digital Systems</h4>
+                <p>Built and deployed custom software tools, financial analytics solutions, and digital platforms supporting organizations and entrepreneurs.</p>
             </div>
         """, unsafe_allow_html=True)
     with a2:
         st.markdown("""
             <div class="dark-card">
-                <h4>Education & Youth Mentorship</h4>
-                <p>Championed academic mentorship and career guidance programs for students across Naiborom and Ol Moran Ward, bridging secondary and tertiary pathways.</p>
+                <h4>Student Mentorship &amp; Community Support</h4>
+                <p>Led academic guidance and motivational programs for primary and secondary students across Naiborom and Ol Moran Ward.</p>
             </div>
         """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 5. EVENTS
+# ------------------------------------------
+# EVENTS PAGE
+# ------------------------------------------
 elif active == "Events":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
     st.markdown('<div class="section-kicker">COMMUNITY ENGAGEMENT</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-heading">Upcoming Ward Forums & Events</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Ward Forums &amp; Outreach</div>', unsafe_allow_html=True)
     st.markdown("""
         <div class="dark-card">
-            <h4>Ol Moran Ward Listening & Youth Empowerment Tour</h4>
-            <p>Join Gachara Ndirangu across Naiborom, Kio, and Wangwachi for open community forums focused on youth employment, agriculture, and ward development priorities. Check the Gallery tab for highlights from recent engagements.</p>
+            <h4>Ol Moran Ward Listening &amp; Youth Empowerment Forums</h4>
+            <p>Interactive community sessions across Naiborom, Kio, and Wangwachi focused on agriculture, youth skills, and local infrastructure priorities. Visit the Gallery tab to view highlights.</p>
         </div>
     """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 6. GALLERY
+# ------------------------------------------
+# GALLERY PAGE
+# ------------------------------------------
 elif active == "Gallery":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
     col_g1, col_g2 = st.columns([4, 1], vertical_alignment="center")
     with col_g1:
-        st.markdown('<div class="section-kicker">MOMENTS & COMMUNITY ACTION</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-kicker">MOMENTS &amp; COMMUNITY ACTION</div>', unsafe_allow_html=True)
         st.markdown('<div class="section-heading">Photo Gallery</div>', unsafe_allow_html=True)
     with col_g2:
         if st.session_state.authenticated:
+            st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
             if st.button("+ Upload Photos", use_container_width=True):
                 st.session_state.active_page = "Admin"
                 st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
 
     gallery_items = load_gallery()
 
@@ -533,15 +671,17 @@ elif active == "Gallery":
                 with cols[idx % 3]:
                     st.image(img_path, use_container_width=True)
                     st.markdown(f"""
-                        <div style="background:#1f2226; padding:0.75rem 1rem; border-radius:0 0 6px 6px; border:1px solid #2e3238; border-top:none; margin-bottom:1.5rem;">
+                        <div style="background:#14161a; padding:0.85rem 1rem; border-radius:0 0 10px 10px; border:1px solid #272a30; border-top:none; margin-bottom:1.5rem;">
                             <div style="color:#ecc953; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">{item.get('category', 'Gallery')}</div>
                             <div style="color:#ffffff; font-weight:600; font-size:0.95rem; margin-top:2px;">{item['caption']}</div>
-                            <div style="color:#94a3b8; font-size:0.78rem; margin-top:4px;">{item['uploaded_at']}</div>
+                            <div style="color:#71717a; font-size:0.78rem; margin-top:4px;">{item['uploaded_at']}</div>
                         </div>
                     """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 7. CONTACT / REGISTER
+# ------------------------------------------
+# CONTACT PAGE
+# ------------------------------------------
 elif active == "Contact":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
     st.markdown('<div class="section-kicker">GET INVOLVED</div>', unsafe_allow_html=True)
@@ -551,15 +691,17 @@ elif active == "Contact":
         name = st.text_input("Full Name")
         phone = st.text_input("Phone Number / WhatsApp")
         area = st.text_input("Village / Polling Station in Ol Moran Ward")
-        message = st.text_area("How would you like to partner or share your ideas?")
+        message = st.text_area("How would you like to collaborate or share your feedback?")
         if st.form_submit_button("Submit"):
             if name and phone:
-                st.success(f"Thank you, {name}! Your details have been recorded.")
+                st.success(f"Thank you, {name}! Your message has been received.")
             else:
-                st.warning("Please enter your name and phone number.")
+                st.warning("Please provide your name and phone number.")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 8. ADMIN PORTAL
+# ------------------------------------------
+# ADMIN PORTAL
+# ------------------------------------------
 elif active == "Admin":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
     st.markdown('<div class="section-kicker">ADMINISTRATOR ACCESS</div>', unsafe_allow_html=True)
