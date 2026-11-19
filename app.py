@@ -29,8 +29,6 @@ if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "active_page" not in st.session_state:
     st.session_state.active_page = "Home"
-if "showcase_tab" not in st.session_state:
-    st.session_state.showcase_tab = "Finance & Strategy"
 
 
 # --- Helper Functions ---
@@ -74,7 +72,7 @@ def delete_image(image_id):
     save_gallery(updated_data)
 
 
-# --- Custom CSS (Black & Gold + Centered Modern Layout) ---
+# --- Custom CSS (White Body + Black & Gold Theme) ---
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -84,8 +82,8 @@ header {visibility: hidden;}
 footer {visibility: hidden;}
 
 .stApp {
-    background-color: #0d0e10;
-    color: #f4f4f5;
+    background-color: #ffffff;
+    color: #111827;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -97,11 +95,10 @@ footer {visibility: hidden;}
     max-width: 100% !important;
 }
 
-/* Top Announcement Bar */
+/* Top Announcement Bar (Black & Gold) */
 .top-announcement {
-    background-color: #181a1f;
-    border-bottom: 1px solid #272a30;
-    color: #e4e4e7;
+    background-color: #111315;
+    color: #f4f4f5;
     text-align: center;
     font-size: 0.82rem;
     font-weight: 500;
@@ -122,8 +119,9 @@ footer {visibility: hidden;}
 }
 
 .gn-monogram {
-    background-color: #ecc953;
-    color: #0d0e10;
+    background-color: #111315;
+    color: #ecc953;
+    border: 1.5px solid #ecc953;
     font-weight: 800;
     font-size: 0.95rem;
     padding: 6px 9px;
@@ -133,60 +131,60 @@ footer {visibility: hidden;}
 }
 
 .brand-label {
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 0.92rem;
+    color: #111827;
+    font-weight: 800;
+    font-size: 0.94rem;
     letter-spacing: -0.2px;
 }
 
 /* Nav Links */
 div[data-testid="stHorizontalBlock"] .stButton > button {
     background-color: transparent;
-    color: #d4d4d8;
+    color: #374151;
     border: none;
     font-size: 0.86rem;
-    font-weight: 500;
+    font-weight: 600;
     padding: 0.4rem 0.45rem;
     transition: color 0.15s ease;
 }
 
 div[data-testid="stHorizontalBlock"] .stButton > button:hover {
-    color: #ecc953;
+    color: #b8860b;
     background-color: transparent;
 }
 
 /* Primary Gold CTA Button */
 .cta-gold > div > button {
     background-color: #ecc953 !important;
-    color: #0d0e10 !important;
-    font-weight: 600 !important;
+    color: #111315 !important;
+    font-weight: 700 !important;
     font-size: 0.92rem !important;
     border-radius: 8px !important;
     padding: 0.6rem 1.35rem !important;
-    border: 1px solid #ecc953 !important;
+    border: 1px solid #d4af37 !important;
     transition: all 0.2s ease !important;
 }
 
 .cta-gold > div > button:hover {
     background-color: #f5d76e !important;
-    border-color: #f5d76e !important;
+    color: #111315 !important;
 }
 
-/* Secondary Outline CTA Button */
+/* Secondary Black/Outline CTA Button */
 .cta-outline > div > button {
-    background-color: #16181d !important;
-    color: #f4f4f5 !important;
+    background-color: #ffffff !important;
+    color: #111827 !important;
     font-weight: 600 !important;
     font-size: 0.92rem !important;
     border-radius: 8px !important;
     padding: 0.6rem 1.35rem !important;
-    border: 1px solid #32363f !important;
+    border: 1px solid #d1d5db !important;
     transition: all 0.2s ease !important;
 }
 
 .cta-outline > div > button:hover {
-    border-color: #ecc953 !important;
-    color: #ecc953 !important;
+    border-color: #111827 !important;
+    background-color: #f9fafb !important;
 }
 
 /* Centered Hero Section */
@@ -194,11 +192,11 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     max-width: 860px;
     margin: 0 auto;
     text-align: center;
-    padding: 4.5rem 1.5rem 2rem 1.5rem;
+    padding: 4.2rem 1.5rem 1.8rem 1.5rem;
 }
 
 .hero-eyebrow {
-    color: #ecc953;
+    color: #b8860b;
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 2.2px;
@@ -211,73 +209,72 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     font-weight: 800;
     line-height: 1.1;
     letter-spacing: -1.2px;
-    color: #ffffff;
+    color: #111827;
     margin-bottom: 1.3rem;
 }
 
 .hero-main-title .gold-line {
-    color: #ecc953;
+    color: #c59316;
     display: block;
 }
 
 .hero-subcopy {
-    color: #a1a1aa;
+    color: #4b5563;
     font-size: 1.08rem;
     line-height: 1.65;
     max-width: 660px;
     margin: 0 auto 2rem auto;
 }
 
-/* Credential Pill Strip (Mirrors pip install badge strip) */
+/* Credential Pill Strip */
 .credential-strip {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    background-color: #14161a;
-    border: 1px solid #272a30;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
     border-radius: 999px;
     padding: 0.45rem 1.1rem;
     margin-top: 1.4rem;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.8rem;
-    color: #d4d4d8;
+    color: #1f2937;
 }
 
 .pill-badge {
-    background-color: rgba(236, 201, 83, 0.14);
+    background-color: #111315;
     color: #ecc953;
-    border: 1px solid rgba(236, 201, 83, 0.35);
-    padding: 2px 10px;
+    padding: 3px 11px;
     border-radius: 999px;
     font-family: 'Inter', sans-serif;
     font-weight: 600;
     font-size: 0.74rem;
 }
 
-/* Framed App/Preview Window */
+/* Framed Preview Window */
 .showcase-frame {
     max-width: 1020px;
     margin: 2.5rem auto 0 auto;
-    background-color: #14161a;
-    border: 1px solid #272a30;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 14px 40px rgba(17, 24, 39, 0.08);
 }
 
 .showcase-header {
-    background-color: #1a1d23;
-    border-bottom: 1px solid #272a30;
+    background-color: #111315;
+    color: #d1d5db;
     padding: 0.85rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 0.82rem;
-    color: #a1a1aa;
 }
 
 .showcase-body {
     padding: 2.2rem 2.5rem;
+    background-color: #fafafa;
 }
 
 /* Standard Inner Page Container */
@@ -288,7 +285,7 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
 }
 
 .section-kicker {
-    color: #ecc953;
+    color: #b8860b;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 2px;
@@ -300,32 +297,34 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     font-size: 2.2rem;
     font-weight: 800;
     letter-spacing: -0.6px;
-    color: #ffffff;
+    color: #111827;
     margin-bottom: 1.5rem;
 }
 
-.dark-card {
-    background-color: #14161a;
-    border: 1px solid #272a30;
+.light-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-top: 3px solid #ecc953;
     border-radius: 12px;
     padding: 1.65rem;
     height: 100%;
-    transition: border-color 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
-.dark-card:hover {
-    border-color: #ecc953;
+.light-card:hover {
+    border-color: #111315;
 }
 
-.dark-card h4 {
-    color: #ecc953;
+.light-card h4 {
+    color: #111827;
     font-size: 1.12rem;
     font-weight: 700;
     margin-bottom: 0.65rem;
 }
 
-.dark-card p {
-    color: #a1a1aa;
+.light-card p {
+    color: #4b5563;
     font-size: 0.94rem;
     line-height: 1.6;
 }
@@ -337,12 +336,12 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
 # ==========================================
 st.markdown("""
     <div class="top-announcement">
-        🟡 Ol Moran Ward Development Initiative &nbsp;•&nbsp; Unity, Knowledge & Wealth &nbsp;<span>Explore Our Vision →</span>
+        🟡 Ol Moran Ward Development Initiative &nbsp;•&nbsp; Unity, Knowledge &amp; Wealth &nbsp;<span>Explore Our Vision →</span>
     </div>
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. TOP NAVIGATION BAR (Includes "Why Gachara")
+# 2. TOP NAVIGATION BAR
 # ==========================================
 nav_brand, nav_links, nav_auth = st.columns([2.0, 5.8, 1.8], vertical_alignment="center")
 
@@ -396,7 +395,7 @@ with nav_auth:
             st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown("<hr style='margin: 0; border-color: #1f2228;'>", unsafe_allow_html=True)
+st.markdown("<hr style='margin: 0; border-color: #e5e7eb;'>", unsafe_allow_html=True)
 
 # ==========================================
 # PAGE ROUTING
@@ -404,7 +403,7 @@ st.markdown("<hr style='margin: 0; border-color: #1f2228;'>", unsafe_allow_html=
 active = st.session_state.active_page
 
 # ------------------------------------------
-# HOME PAGE (Centered Hero + Dual CTAs + Framed Showcase)
+# HOME PAGE
 # ------------------------------------------
 if active == "Home":
     st.markdown("""
@@ -420,7 +419,6 @@ if active == "Home":
         </div>
     """, unsafe_allow_html=True)
 
-    # Centered Dual CTA Buttons
     sp1, btn_col1, btn_col2, btn_col3, sp2 = st.columns([2.3, 1.5, 1.6, 1.3, 2.3], vertical_alignment="center")
     with btn_col1:
         st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
@@ -439,7 +437,6 @@ if active == "Home":
             st.session_state.active_page = "Gallery"
             st.rerun()
 
-    # Centered Credential Pill Strip (mirrors the `pip install streamlit | Open source` bar)
     st.markdown("""
         <div style="text-align: center;">
             <div class="credential-strip">
@@ -449,11 +446,10 @@ if active == "Home":
         </div>
     """, unsafe_allow_html=True)
 
-    # Framed Interactive Preview Box (mirrors the bottom preview card in the screenshot)
     st.markdown("""
         <div class="showcase-frame">
             <div class="showcase-header">
-                <div>📄 <strong style="color:#ffffff;">gachara_ndirangu.profile</strong> &nbsp;•&nbsp; Ol Moran Ward, Laikipia</div>
+                <div>📄 <strong style="color:#ecc953;">gachara_ndirangu.profile</strong> &nbsp;•&nbsp; Ol Moran Ward, Laikipia</div>
                 <div>Naiborom Primary &nbsp;→&nbsp; Alliance High School &nbsp;→&nbsp; Kenyatta University</div>
             </div>
             <div class="showcase-body">
@@ -462,21 +458,21 @@ if active == "Home":
     sc1, sc2, sc3 = st.columns(3)
     with sc1:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>📊 Financial Acumen</h4>
                 <p>Bachelor of Commerce (Finance) training applied to transparent ward budgeting, resource accountability, and local cooperative growth.</p>
             </div>
         """, unsafe_allow_html=True)
     with sc2:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>💻 Computer Science &amp; IT</h4>
                 <p>Modern software engineering, data-driven decision-making, and digital skills empowerment for youth and local enterprises.</p>
             </div>
         """, unsafe_allow_html=True)
     with sc3:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>🤝 Impactful Leadership</h4>
                 <p>Rooted in Naiborom Primary and Alliance High School values—listening closely and delivering practical infrastructure and security solutions.</p>
             </div>
@@ -493,8 +489,8 @@ elif active == "Why Gachara":
     st.markdown('<div class="section-heading">Why Gachara Ndirangu?</div>', unsafe_allow_html=True)
 
     st.markdown("""
-        <div class="dark-card" style="margin-bottom: 2rem;">
-            <p style="font-size: 1.06rem; color: #f4f4f5;">
+        <div class="light-card" style="margin-bottom: 2rem;">
+            <p style="font-size: 1.06rem; color: #1f2937;">
                 Modern ward representation demands more than promises—it requires <strong>financial literacy</strong> to manage public funds responsibly and <strong>technological fluency</strong> to connect residents to modern economic opportunities. David Gachara Ndirangu brings both.
             </p>
         </div>
@@ -503,21 +499,21 @@ elif active == "Why Gachara":
     w1, w2, w3 = st.columns(3)
     with w1:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>1. Proven Financial Discipline</h4>
                 <p>With a Bachelor of Commerce (Finance) from Kenyatta University, every project is evaluated for cost-effectiveness, transparency, and measurable community return.</p>
             </div>
         """, unsafe_allow_html=True)
     with w2:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>2. Future-Ready Tech Adoption</h4>
                 <p>Advanced Computer Science &amp; IT expertise enables smarter service delivery, digital literacy programs for youth, and data-backed planning for water and agriculture.</p>
             </div>
         """, unsafe_allow_html=True)
     with w3:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>3. Deep Local Roots</h4>
                 <p>Educated at Naiborom Primary School and Alliance High School, he understands the everyday realities of Ol Moran families and brings national-caliber leadership home.</p>
             </div>
@@ -533,8 +529,8 @@ elif active == "About":
     st.markdown('<div class="section-heading">About David Gachara Ndirangu</div>', unsafe_allow_html=True)
 
     st.markdown("""
-        <div class="dark-card" style="margin-bottom: 2rem;">
-            <p style="font-size: 1.08rem; color: #f4f4f5;">
+        <div class="light-card" style="margin-bottom: 2rem;">
+            <p style="font-size: 1.08rem; color: #1f2937;">
                 <strong>David Gachara Ndirangu</strong> is a multidisciplinary professional with expertise spanning finance, computer science, and technology. 
                 An alumnus of <strong>Naiborom Primary School</strong> and <strong>Alliance High School</strong>, he holds a 
                 <strong>Bachelor of Commerce (Finance)</strong> from <strong>Kenyatta University</strong> and advanced training in 
@@ -547,7 +543,7 @@ elif active == "About":
     col_a, col_b = st.columns(2)
     with col_a:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>Education &amp; Training</h4>
                 <p>
                     • <strong>Kenyatta University:</strong> Bachelor of Commerce (Finance)<br><br>
@@ -559,7 +555,7 @@ elif active == "About":
         """, unsafe_allow_html=True)
     with col_b:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>Core Leadership Values</h4>
                 <p>
                     • <strong>Unity:</strong> Bringing every community across Ol Moran Ward together around shared goals.<br><br>
@@ -581,21 +577,21 @@ elif active == "Our Vision":
     v1, v2, v3 = st.columns(3)
     with v1:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>01. Youth &amp; Digital Economy</h4>
                 <p>Establishing ICT empowerment hubs, coding and digital skills bootcamps, and youth enterprise support across the ward.</p>
             </div>
         """, unsafe_allow_html=True)
     with v2:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>02. Agricultural Resilience</h4>
                 <p>Strengthening farmer cooperatives, water harvesting, and fair market linkages using sound financial planning.</p>
             </div>
         """, unsafe_allow_html=True)
     with v3:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>03. Security &amp; Infrastructure</h4>
                 <p>Championing passable rural roads, reliable water points, solar lighting, and human-wildlife conflict mitigation.</p>
             </div>
@@ -613,14 +609,14 @@ elif active == "Achievements":
     a1, a2 = st.columns(2)
     with a1:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>Technology &amp; Digital Systems</h4>
                 <p>Built and deployed custom software tools, financial analytics solutions, and digital platforms supporting organizations and entrepreneurs.</p>
             </div>
         """, unsafe_allow_html=True)
     with a2:
         st.markdown("""
-            <div class="dark-card">
+            <div class="light-card">
                 <h4>Student Mentorship &amp; Community Support</h4>
                 <p>Led academic guidance and motivational programs for primary and secondary students across Naiborom and Ol Moran Ward.</p>
             </div>
@@ -635,7 +631,7 @@ elif active == "Events":
     st.markdown('<div class="section-kicker">COMMUNITY ENGAGEMENT</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-heading">Ward Forums &amp; Outreach</div>', unsafe_allow_html=True)
     st.markdown("""
-        <div class="dark-card">
+        <div class="light-card">
             <h4>Ol Moran Ward Listening &amp; Youth Empowerment Forums</h4>
             <p>Interactive community sessions across Naiborom, Kio, and Wangwachi focused on agriculture, youth skills, and local infrastructure priorities. Visit the Gallery tab to view highlights.</p>
         </div>
@@ -671,10 +667,10 @@ elif active == "Gallery":
                 with cols[idx % 3]:
                     st.image(img_path, use_container_width=True)
                     st.markdown(f"""
-                        <div style="background:#14161a; padding:0.85rem 1rem; border-radius:0 0 10px 10px; border:1px solid #272a30; border-top:none; margin-bottom:1.5rem;">
-                            <div style="color:#ecc953; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">{item.get('category', 'Gallery')}</div>
-                            <div style="color:#ffffff; font-weight:600; font-size:0.95rem; margin-top:2px;">{item['caption']}</div>
-                            <div style="color:#71717a; font-size:0.78rem; margin-top:4px;">{item['uploaded_at']}</div>
+                        <div style="background:#ffffff; padding:0.85rem 1rem; border-radius:0 0 10px 10px; border:1px solid #e5e7eb; border-top:none; margin-bottom:1.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.04);">
+                            <div style="color:#b8860b; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">{item.get('category', 'Gallery')}</div>
+                            <div style="color:#111827; font-weight:700; font-size:0.95rem; margin-top:2px;">{item['caption']}</div>
+                            <div style="color:#6b7280; font-size:0.78rem; margin-top:4px;">{item['uploaded_at']}</div>
                         </div>
                     """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
