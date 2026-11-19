@@ -86,7 +86,8 @@ def delete_image(image_id):
 
 
 # --- Custom CSS (White Body + Black & Gold + Black Logo & Join Us Buttons) ---
-st.markdown("""
+st.markdown(
+"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -95,423 +96,421 @@ header {visibility: hidden;}
 footer {visibility: hidden;}
 
 .stApp {
-    background-color: #ffffff;
-    color: #111827;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+background-color: #ffffff;
+color: #111827;
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .block-container {
-    padding-top: 0rem !important;
-    padding-bottom: 3rem !important;
-    padding-left: 0rem !important;
-    padding-right: 0rem !important;
-    max-width: 100% !important;
+padding-top: 0rem !important;
+padding-bottom: 3rem !important;
+padding-left: 0rem !important;
+padding-right: 0rem !important;
+max-width: 100% !important;
 }
 
 /* Top Announcement Bar */
 .top-announcement {
-    background-color: #111315;
-    color: #f4f4f5;
-    text-align: center;
-    font-size: 0.82rem;
-    font-weight: 500;
-    padding: 0.55rem 1rem;
-    letter-spacing: 0.2px;
+background-color: #111315;
+color: #f4f4f5;
+text-align: center;
+font-size: 0.82rem;
+font-weight: 500;
+padding: 0.55rem 1rem;
+letter-spacing: 0.2px;
 }
 
-.top-announcement span {
-    color: #ecc953;
-    font-weight: 600;
+.top-announcement a {
+color: #ecc953 !important;
+font-weight: 600;
+text-decoration: none !important;
 }
 
 /* Sticky Header + Horizontal Menu Bar */
 .site-header {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-    position: sticky;
-    top: 0;
-    z-index: 999;
+background-color: #ffffff;
+border-bottom: 1px solid #e5e7eb;
+position: sticky;
+top: 0;
+z-index: 999;
 }
 
 .header-top-row {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0.7rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+max-width: 1240px;
+margin: 0 auto;
+padding: 0.7rem 1.5rem;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
 }
 
 .brand-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none !important;
-    flex-shrink: 0;
-    background-color: #111315;
-    padding: 6px 12px 6px 8px;
-    border-radius: 8px;
-    border: 1px solid #1f2226;
+display: inline-flex;
+align-items: center;
+gap: 10px;
+text-decoration: none !important;
+flex-shrink: 0;
+background-color: #111315;
+padding: 6px 12px 6px 8px;
+border-radius: 8px;
+border: 1px solid #1f2226;
 }
 
 .gn-monogram {
-    background-color: #ecc953;
-    color: #111315;
-    font-weight: 800;
-    font-size: 0.92rem;
-    padding: 6px 9px;
-    border-radius: 6px;
-    letter-spacing: 0.5px;
-    line-height: 1;
+background-color: #ecc953;
+color: #111315;
+font-weight: 800;
+font-size: 0.92rem;
+padding: 6px 9px;
+border-radius: 6px;
+letter-spacing: 0.5px;
+line-height: 1;
 }
 
 .brand-label {
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 0.92rem;
-    letter-spacing: -0.2px;
-    white-space: nowrap;
+color: #ffffff;
+font-weight: 800;
+font-size: 0.92rem;
+letter-spacing: -0.2px;
+white-space: nowrap;
 }
 
 .auth-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
+display: inline-flex;
+flex-direction: row;
+align-items: center;
+gap: 8px;
+flex-shrink: 0;
 }
 
 .btn-outline-link {
-    display: inline-block;
-    text-decoration: none !important;
-    background-color: #ffffff;
-    color: #111827 !important;
-    font-weight: 600;
-    font-size: 0.84rem;
-    padding: 0.44rem 0.92rem;
-    border-radius: 7px;
-    border: 1px solid #d1d5db;
-    white-space: nowrap;
+display: inline-block;
+text-decoration: none !important;
+background-color: #ffffff;
+color: #111827 !important;
+font-weight: 600;
+font-size: 0.84rem;
+padding: 0.44rem 0.92rem;
+border-radius: 7px;
+border: 1px solid #d1d5db;
+white-space: nowrap;
 }
 
 .btn-outline-link:hover {
-    border-color: #111827;
-    background-color: #f9fafb;
+border-color: #111827;
+background-color: #f9fafb;
 }
 
-/* Black Background Join Us / Admin Action Button with Gold Text */
 .btn-black-gold-link {
-    display: inline-block;
-    text-decoration: none !important;
-    background-color: #111315;
-    color: #ecc953 !important;
-    font-weight: 700;
-    font-size: 0.84rem;
-    padding: 0.44rem 0.98rem;
-    border-radius: 7px;
-    border: 1px solid #111315;
-    white-space: nowrap;
-    transition: all 0.15s ease;
+display: inline-block;
+text-decoration: none !important;
+background-color: #111315;
+color: #ecc953 !important;
+font-weight: 700;
+font-size: 0.84rem;
+padding: 0.44rem 0.98rem;
+border-radius: 7px;
+border: 1px solid #111315;
+white-space: nowrap;
+transition: all 0.15s ease;
 }
 
 .btn-black-gold-link:hover {
-    background-color: #1f2226;
-    border-color: #ecc953;
+background-color: #1f2226;
+border-color: #ecc953;
 }
 
 /* Horizontal Menu Strip (Always Horizontal on Mobile & Desktop) */
 .horizontal-menu-bar {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0.45rem 1.5rem 0.65rem 1.5rem;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 6px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+max-width: 1240px;
+margin: 0 auto;
+padding: 0.45rem 1.5rem 0.65rem 1.5rem;
+display: flex;
+flex-direction: row;
+flex-wrap: nowrap;
+align-items: center;
+justify-content: flex-start;
+gap: 6px;
+overflow-x: auto;
+overflow-y: hidden;
+-webkit-overflow-scrolling: touch;
+scrollbar-width: none;
 }
 
 .horizontal-menu-bar::-webkit-scrollbar {
-    display: none;
+display: none;
 }
 
 .nav-pill {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
-    white-space: nowrap;
-    text-decoration: none !important;
-    color: #374151 !important;
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 0.38rem 0.8rem;
-    border-radius: 999px;
-    border: 1px solid transparent;
-    transition: all 0.15s ease;
+display: inline-flex;
+align-items: center;
+flex: 0 0 auto;
+white-space: nowrap;
+text-decoration: none !important;
+color: #374151 !important;
+font-size: 0.85rem;
+font-weight: 600;
+padding: 0.38rem 0.8rem;
+border-radius: 999px;
+border: 1px solid transparent;
+transition: all 0.15s ease;
 }
 
 .nav-pill:hover {
-    color: #111827 !important;
-    background-color: #f3f4f6;
+color: #111827 !important;
+background-color: #f3f4f6;
 }
 
 .nav-pill.active {
-    background-color: #111315;
-    color: #ecc953 !important;
-    border-color: #111315;
+background-color: #111315;
+color: #ecc953 !important;
+border-color: #111315;
 }
 
 /* Streamlit Buttons inside Pages */
 .cta-gold > div > button {
-    background-color: #ecc953 !important;
-    color: #111315 !important;
-    font-weight: 700 !important;
-    font-size: 0.92rem !important;
-    border-radius: 8px !important;
-    padding: 0.6rem 1.35rem !important;
-    border: 1px solid #d4af37 !important;
+background-color: #ecc953 !important;
+color: #111315 !important;
+font-weight: 700 !important;
+font-size: 0.92rem !important;
+border-radius: 8px !important;
+padding: 0.6rem 1.35rem !important;
+border: 1px solid #d4af37 !important;
 }
 
 .cta-gold > div > button:hover {
-    background-color: #f5d76e !important;
-    color: #111315 !important;
+background-color: #f5d76e !important;
+color: #111315 !important;
 }
 
 .cta-outline > div > button {
-    background-color: #ffffff !important;
-    color: #111827 !important;
-    font-weight: 600 !important;
-    font-size: 0.92rem !important;
-    border-radius: 8px !important;
-    padding: 0.6rem 1.35rem !important;
-    border: 1px solid #d1d5db !important;
+background-color: #ffffff !important;
+color: #111827 !important;
+font-weight: 600 !important;
+font-size: 0.92rem !important;
+border-radius: 8px !important;
+padding: 0.6rem 1.35rem !important;
+border: 1px solid #d1d5db !important;
 }
 
 .cta-outline > div > button:hover {
-    border-color: #111827 !important;
-    background-color: #f9fafb !important;
+border-color: #111827 !important;
+background-color: #f9fafb !important;
 }
 
 /* Centered Hero Section */
 .centered-hero {
-    max-width: 860px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 4rem 1.5rem 1.6rem 1.5rem;
+max-width: 860px;
+margin: 0 auto;
+text-align: center;
+padding: 4rem 1.5rem 1.6rem 1.5rem;
 }
 
 .hero-eyebrow {
-    color: #b8860b;
-    font-size: 0.76rem;
-    font-weight: 700;
-    letter-spacing: 2.2px;
-    text-transform: uppercase;
-    margin-bottom: 1.1rem;
+color: #b8860b;
+font-size: 0.76rem;
+font-weight: 700;
+letter-spacing: 2.2px;
+text-transform: uppercase;
+margin-bottom: 1.1rem;
 }
 
 .hero-main-title {
-    font-size: clamp(2.2rem, 5vw, 4.1rem);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -1.2px;
-    color: #111827;
-    margin-bottom: 1.3rem;
+font-size: clamp(2.2rem, 5vw, 4.1rem);
+font-weight: 800;
+line-height: 1.1;
+letter-spacing: -1.2px;
+color: #111827;
+margin-bottom: 1.3rem;
 }
 
 .hero-main-title .gold-line {
-    color: #c59316;
-    display: block;
+color: #c59316;
+display: block;
 }
 
 .hero-subcopy {
-    color: #4b5563;
-    font-size: 1.05rem;
-    line-height: 1.65;
-    max-width: 660px;
-    margin: 0 auto 2rem auto;
+color: #4b5563;
+font-size: 1.05rem;
+line-height: 1.65;
+max-width: 660px;
+margin: 0 auto 2rem auto;
 }
 
 /* Credential Pill Strip */
 .credential-strip {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    background-color: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 999px;
-    padding: 0.45rem 1.1rem;
-    margin-top: 1.4rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
-    color: #1f2937;
+display: inline-flex;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+gap: 10px;
+background-color: #f9fafb;
+border: 1px solid #e5e7eb;
+border-radius: 999px;
+padding: 0.45rem 1.1rem;
+margin-top: 1.4rem;
+font-family: 'JetBrains Mono', monospace;
+font-size: 0.78rem;
+color: #1f2937;
 }
 
 .pill-badge {
-    background-color: #111315;
-    color: #ecc953;
-    padding: 3px 11px;
-    border-radius: 999px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 0.74rem;
+background-color: #111315;
+color: #ecc953;
+padding: 3px 11px;
+border-radius: 999px;
+font-family: 'Inter', sans-serif;
+font-weight: 600;
+font-size: 0.74rem;
 }
 
 /* Framed Preview Window */
 .showcase-frame {
-    max-width: 1020px;
-    margin: 2.5rem auto 0 auto;
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 14px 40px rgba(17, 24, 39, 0.08);
+max-width: 1020px;
+margin: 2.5rem auto 0 auto;
+background-color: #ffffff;
+border: 1px solid #e5e7eb;
+border-radius: 14px;
+overflow: hidden;
+box-shadow: 0 14px 40px rgba(17, 24, 39, 0.08);
 }
 
 .showcase-header {
-    background-color: #111315;
-    color: #d1d5db;
-    padding: 0.85rem 1.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.82rem;
+background-color: #111315;
+color: #d1d5db;
+padding: 0.85rem 1.5rem;
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+align-items: center;
+gap: 8px;
+font-size: 0.82rem;
 }
 
 .showcase-body {
-    padding: 2rem 2rem;
-    background-color: #fafafa;
+padding: 2rem 2rem;
+background-color: #fafafa;
 }
 
 /* Standard Inner Page Container */
 .page-container {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 2.5rem 1.5rem;
+max-width: 1120px;
+margin: 0 auto;
+padding: 2.5rem 1.5rem;
 }
 
 .section-kicker {
-    color: #b8860b;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 0.45rem;
+color: #b8860b;
+font-size: 0.75rem;
+font-weight: 700;
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 0.45rem;
 }
 
 .section-heading {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.6px;
-    color: #111827;
-    margin-bottom: 1.5rem;
+font-size: 2rem;
+font-weight: 800;
+letter-spacing: -0.6px;
+color: #111827;
+margin-bottom: 1.5rem;
 }
 
 .light-card {
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-top: 3px solid #ecc953;
-    border-radius: 12px;
-    padding: 1.65rem;
-    height: 100%;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+background-color: #ffffff;
+border: 1px solid #e5e7eb;
+border-top: 3px solid #ecc953;
+border-radius: 12px;
+padding: 1.65rem;
+height: 100%;
+margin-bottom: 1rem;
+box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .light-card h4 {
-    color: #111827;
-    font-size: 1.12rem;
-    font-weight: 700;
-    margin-bottom: 0.65rem;
+color: #111827;
+font-size: 1.12rem;
+font-weight: 700;
+margin-bottom: 0.65rem;
 }
 
 .light-card p {
-    color: #4b5563;
-    font-size: 0.94rem;
-    line-height: 1.6;
+color: #4b5563;
+font-size: 0.94rem;
+line-height: 1.6;
 }
 
 @media (max-width: 768px) {
-    .header-top-row {
-        padding: 0.6rem 0.9rem;
-    }
-    .brand-box {
-        padding: 5px 9px 5px 6px;
-    }
-    .brand-label {
-        font-size: 0.82rem;
-    }
-    .btn-outline-link, .btn-black-gold-link {
-        padding: 0.38rem 0.72rem;
-        font-size: 0.78rem;
-    }
-    .horizontal-menu-bar {
-        padding: 0.35rem 0.9rem 0.55rem 0.9rem;
-    }
-    .centered-hero {
-        padding: 2.5rem 1.1rem 1.4rem 1.1rem;
-    }
-    .showcase-body {
-        padding: 1.15rem;
-    }
+.header-top-row {
+padding: 0.6rem 0.9rem;
+}
+.brand-box {
+padding: 5px 9px 5px 6px;
+}
+.brand-label {
+font-size: 0.82rem;
+}
+.btn-outline-link, .btn-black-gold-link {
+padding: 0.38rem 0.72rem;
+font-size: 0.78rem;
+}
+.horizontal-menu-bar {
+padding: 0.35rem 0.9rem 0.55rem 0.9rem;
+}
+.centered-hero {
+padding: 2.5rem 1.1rem 1.4rem 1.1rem;
+}
+.showcase-body {
+padding: 1.15rem;
+}
 }
 </style>
-""", unsafe_allow_html=True)
+""",
+unsafe_allow_html=True,
+)
 
 # ==========================================
 # 1. TOP ANNOUNCEMENT BANNER
 # ==========================================
-st.markdown("""
-    <div class="top-announcement">
-        🟡 Ol Moran Ward Development Initiative &nbsp;•&nbsp; Unity, Knowledge &amp; Wealth &nbsp;<span><a href="?page=Our+Vision" target="_self" style="color:#ecc953; text-decoration:none;">Explore Our Vision →</a></span>
-    </div>
-""", unsafe_allow_html=True)
+st.markdown(
+'<div class="top-announcement">🟡 Ol Moran Ward Development Initiative &nbsp;•&nbsp; Unity, Knowledge &amp; Wealth &nbsp;<a href="?page=Our+Vision" target="_self">Explore Our Vision →</a></div>',
+unsafe_allow_html=True,
+)
 
 # ==========================================
 # 2. STICKY HEADER + SINGLE-ROW HORIZONTAL MENU
 # ==========================================
 active = st.session_state.active_page
 
-menu_links_html = ""
-for page_name in PAGES:
-    encoded_page = urllib.parse.quote(page_name)
-    active_class = "nav-pill active" if active == page_name else "nav-pill"
-    menu_links_html += f'<a class="{active_class}" href="?page={encoded_page}" target="_self">{page_name}</a>'
+menu_links_html = "".join(
+f'<a class="{"nav-pill active" if active == p else "nav-pill"}" href="?page={urllib.parse.quote(p)}" target="_self">{p}</a>'
+for p in PAGES
+)
 
 if st.session_state.authenticated:
-    auth_links_html = """
-        <a class="btn-black-gold-link" href="?page=Admin" target="_self">Admin</a>
-    """
+    auth_links_html = '<a class="btn-black-gold-link" href="?page=Admin" target="_self">Admin</a>'
 else:
-    auth_links_html = """
-        <a class="btn-outline-link" href="?page=Admin" target="_self">Login</a>
-        <a class="btn-black-gold-link" href="?page=Contact" target="_self">Join Us / Register</a>
-    """
+    auth_links_html = (
+        '<a class="btn-outline-link" href="?page=Admin" target="_self">Login</a>'
+        '<a class="btn-black-gold-link" href="?page=Contact" target="_self">Join Us / Register</a>'
+    )
 
-st.markdown(f"""
-    <div class="site-header">
-        <div class="header-top-row">
-            <a class="brand-box" href="?page=Home" target="_self">
-                <div class="gn-monogram">GN</div>
-                <div class="brand-label">Gachara Ndirangu</div>
-            </a>
-            <div class="auth-actions">
-                {auth_links_html}
-            </div>
-        </div>
-        <div class="horizontal-menu-bar">
-            {menu_links_html}
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+header_html = (
+f'<div class="site-header">'
+f'<div class="header-top-row">'
+f'<a class="brand-box" href="?page=Home" target="_self">'
+f'<div class="gn-monogram">GN</div>'
+f'<div class="brand-label">Gachara Ndirangu</div>'
+f'</a>'
+f'<div class="auth-actions">{auth_links_html}</div>'
+f'</div>'
+f'<div class="horizontal-menu-bar">{menu_links_html}</div>'
+f'</div>'
+)
+
+st.markdown(header_html, unsafe_allow_html=True)
 
 # ==========================================
 # PAGE ROUTING
@@ -521,74 +520,87 @@ st.markdown(f"""
 # HOME PAGE
 # ------------------------------------------
 if active == "Home":
-    st.markdown("""
-        <div class="centered-hero">
-            <div class="hero-eyebrow">FINANCE • COMPUTER SCIENCE • STRATEGIC LEADERSHIP</div>
-            <div class="hero-main-title">
-                A Stronger Ol Moran.
-                <span class="gold-line">Built on Finance &amp; Technology.</span>
-            </div>
-            <div class="hero-subcopy">
-                David Gachara Ndirangu combines financial discipline from Kenyatta University with advanced expertise in Computer Science &amp; IT to drive transparent governance, digital innovation, and sustainable opportunity across Ol Moran Ward.
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+"""
+<div class="centered-hero">
+<div class="hero-eyebrow">FINANCE • COMPUTER SCIENCE • STRATEGIC LEADERSHIP</div>
+<div class="hero-main-title">A Stronger Ol Moran.<span class="gold-line">Built on Finance &amp; Technology.</span></div>
+<div class="hero-subcopy">David Gachara Ndirangu combines financial discipline from Kenyatta University with advanced expertise in Computer Science &amp; IT to drive transparent governance, digital innovation, and sustainable opportunity across Ol Moran Ward.</div>
+</div>
+""",
+unsafe_allow_html=True,
+)
 
     sp1, btn_col1, btn_col2, btn_col3, sp2 = st.columns([2.2, 1.5, 1.6, 1.4, 2.2], vertical_alignment="center")
     with btn_col1:
         st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
         if st.button("Why Gachara →", key="hero_cta_why", use_container_width=True):
             navigate_to("Why Gachara")
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
     with btn_col2:
         st.markdown('<div class="cta-outline">', unsafe_allow_html=True)
         if st.button("Explore Our Vision", key="hero_cta_vision", use_container_width=True):
             navigate_to("Our Vision")
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
     with btn_col3:
         if st.button("View Gallery →", key="hero_cta_gallery", use_container_width=True):
             navigate_to("Gallery")
 
-    st.markdown("""
-        <div style="text-align: center; padding: 0 1rem;">
-            <div class="credential-strip">
-                <span>B.Com (Finance) • Kenyatta University</span>
-                <span class="pill-badge">CS &amp; IT Specialist</span>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+"""
+<div style="text-align: center; padding: 0 1rem;">
+<div class="credential-strip">
+<span>B.Com (Finance) • Kenyatta University</span>
+<span class="pill-badge">CS &amp; IT Specialist</span>
+</div>
+</div>
+""",
+unsafe_allow_html=True,
+)
 
-    st.markdown("""
-        <div class="showcase-frame">
-            <div class="showcase-header">
-                <div>📄 <strong style="color:#ecc953;">gachara_ndirangu.profile</strong> &nbsp;•&nbsp; Ol Moran Ward, Laikipia</div>
-                <div>Naiborom Primary &nbsp;→&nbsp; Alliance High School &nbsp;→&nbsp; Kenyatta University</div>
-            </div>
-            <div class="showcase-body">
-    """, unsafe_allow_html=True)
+    st.markdown(
+"""
+<div class="showcase-frame">
+<div class="showcase-header">
+<div>📄 <strong style="color:#ecc953;">gachara_ndirangu.profile</strong> &nbsp;•&nbsp; Ol Moran Ward, Laikipia</div>
+<div>Naiborom Primary &nbsp;→&nbsp; Alliance High School &nbsp;→&nbsp; Kenyatta University</div>
+</div>
+<div class="showcase-body">
+""",
+unsafe_allow_html=True,
+)
 
     sc1, sc2, sc3 = st.columns(3)
     with sc1:
-        st.markdown("""
-            <div class="light-card">
-                <h4>📊 Financial Acumen</h4>
-                <p>Bachelor of Commerce (Finance) training applied to transparent ward budgeting, resource accountability, and local cooperative growth.</p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>📊 Financial Acumen</h4>
+<p>Bachelor of Commerce (Finance) training applied to transparent ward budgeting, resource accountability, and local cooperative growth.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
     with sc2:
-        st.markdown("""
-            <div class="light-card">
-                <h4>💻 Computer Science &amp; IT</h4>
-                <p>Modern software engineering, data-driven decision-making, and digital skills empowerment for youth and local enterprises.</p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>💻 Computer Science &amp; IT</h4>
+<p>Modern software engineering, data-driven decision-making, and digital skills empowerment for youth and local enterprises.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
     with sc3:
-        st.markdown("""
-            <div class="light-card">
-                <h4>🤝 Impactful Leadership</h4>
-                <p>Rooted in Naiborom Primary and Alliance High School values—listening closely and delivering practical infrastructure and security solutions.</p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>🤝 Impactful Leadership</h4>
+<p>Rooted in Naiborom Primary and Alliance High School values—listening closely and delivering practical infrastructure and security solutions.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
 
     st.markdown("</div></div>", unsafe_allow_html=True)
 
@@ -600,37 +612,47 @@ elif active == "Why Gachara":
     st.markdown('<div class="section-kicker">THE CASE FOR MULTIDISCIPLINARY LEADERSHIP</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-heading">Why Gachara Ndirangu?</div>', unsafe_allow_html=True)
 
-    st.markdown("""
-        <div class="light-card" style="margin-bottom: 2rem;">
-            <p style="font-size: 1.06rem; color: #1f2937;">
-                Modern ward representation demands more than promises—it requires <strong>financial literacy</strong> to manage public funds responsibly and <strong>technological fluency</strong> to connect residents to modern economic opportunities. David Gachara Ndirangu brings both.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+"""
+<div class="light-card" style="margin-bottom: 2rem;">
+<p style="font-size: 1.06rem; color: #1f2937;">Modern ward representation demands more than promises—it requires <strong>financial literacy</strong> to manage public funds responsibly and <strong>technological fluency</strong> to connect residents to modern economic opportunities. David Gachara Ndirangu brings both.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
 
     w1, w2, w3 = st.columns(3)
     with w1:
-        st.markdown("""
-            <div class="light-card">
-                <h4>1. Proven Financial Discipline</h4>
-                <p>With a Bachelor of Commerce (Finance) from Kenyatta University, every project is evaluated for cost-effectiveness, transparency, and measurable community return.</p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>1. Proven Financial Discipline</h4>
+<p>With a Bachelor of Commerce (Finance) from Kenyatta University, every project is evaluated for cost-effectiveness, transparency, and measurable community return.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
     with w2:
-        st.markdown("""
-            <div class="light-card">
-                <h4>2. Future-Ready Tech Adoption</h4>
-                <p>Advanced Computer Science &amp; IT expertise enables smarter service delivery, digital literacy programs for youth, and data-backed planning for water and agriculture.</p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>2. Future-Ready Tech Adoption</h4>
+<p>Advanced Computer Science &amp; IT expertise enables smarter service delivery, digital literacy programs for youth, and data-backed planning for water and agriculture.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
     with w3:
-        st.markdown("""
-            <div class="light-card">
-                <h4>3. Deep Local Roots</h4>
-                <p>Educated at Naiborom Primary School and Alliance High School, he understands the everyday realities of Ol Moran families and brings national-caliber leadership home.</p>
-            </div>
-        """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>3. Deep Local Roots</h4>
+<p>Educated at Naiborom Primary School and Alliance High School, he understands the everyday realities of Ol Moran families and brings national-caliber leadership home.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------------------------------
 # ABOUT PAGE
@@ -640,43 +662,37 @@ elif active == "About":
     st.markdown('<div class="section-kicker">BIOGRAPHY &amp; CREDENTIALS</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-heading">About David Gachara Ndirangu</div>', unsafe_allow_html=True)
 
-    st.markdown("""
-        <div class="light-card" style="margin-bottom: 2rem;">
-            <p style="font-size: 1.08rem; color: #1f2937;">
-                <strong>David Gachara Ndirangu</strong> is a multidisciplinary professional with expertise spanning finance, computer science, and technology. 
-                An alumnus of <strong>Naiborom Primary School</strong> and <strong>Alliance High School</strong>, he holds a 
-                <strong>Bachelor of Commerce (Finance)</strong> from <strong>Kenyatta University</strong> and advanced training in 
-                <strong>Computer Science &amp; IT</strong>. His unique combination of financial acumen and technical expertise enables him 
-                to drive strategic decision-making, technological adoption, and impactful leadership.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+"""
+<div class="light-card" style="margin-bottom: 2rem;">
+<p style="font-size: 1.08rem; color: #1f2937;"><strong>David Gachara Ndirangu</strong> is a multidisciplinary professional with expertise spanning finance, computer science, and technology. An alumnus of <strong>Naiborom Primary School</strong> and <strong>Alliance High School</strong>, he holds a <strong>Bachelor of Commerce (Finance)</strong> from <strong>Kenyatta University</strong> and advanced training in <strong>Computer Science &amp; IT</strong>. His unique combination of financial acumen and technical expertise enables him to drive strategic decision-making, technological adoption, and impactful leadership.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
 
     col_a, col_b = st.columns(2)
     with col_a:
-        st.markdown("""
-            <div class="light-card">
-                <h4>Education &amp; Training</h4>
-                <p>
-                    • <strong>Kenyatta University:</strong> Bachelor of Commerce (Finance)<br><br>
-                    • <strong>Computer Science &amp; IT:</strong> Advanced Software, Data &amp; Systems Training<br><br>
-                    • <strong>Alliance High School:</strong> Kenya Certificate of Secondary Education<br><br>
-                    • <strong>Naiborom Primary School:</strong> Primary Education (Ol Moran Ward)
-                </p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>Education &amp; Training</h4>
+<p>• <strong>Kenyatta University:</strong> Bachelor of Commerce (Finance)<br><br>• <strong>Computer Science &amp; IT:</strong> Advanced Software, Data &amp; Systems Training<br><br>• <strong>Alliance High School:</strong> Kenya Certificate of Secondary Education<br><br>• <strong>Naiborom Primary School:</strong> Primary Education (Ol Moran Ward)</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
     with col_b:
-        st.markdown("""
-            <div class="light-card">
-                <h4>Core Leadership Values</h4>
-                <p>
-                    • <strong>Unity:</strong> Bringing every community across Ol Moran Ward together around shared goals.<br><br>
-                    • <strong>Knowledge:</strong> Expanding access to quality education, ICT training, and youth mentorship.<br><br>
-                    • <strong>Wealth:</strong> Unlocking agricultural value chains, market access, and local enterprise.
-                </p>
-            </div>
-        """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>Core Leadership Values</h4>
+<p>• <strong>Unity:</strong> Bringing every community across Ol Moran Ward together around shared goals.<br><br>• <strong>Knowledge:</strong> Expanding access to quality education, ICT training, and youth mentorship.<br><br>• <strong>Wealth:</strong> Unlocking agricultural value chains, market access, and local enterprise.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------------------------------
 # OUR VISION PAGE
@@ -688,27 +704,36 @@ elif active == "Our Vision":
 
     v1, v2, v3 = st.columns(3)
     with v1:
-        st.markdown("""
-            <div class="light-card">
-                <h4>01. Youth &amp; Digital Economy</h4>
-                <p>Establishing ICT empowerment hubs, coding and digital skills bootcamps, and youth enterprise support across the ward.</p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>01. Youth &amp; Digital Economy</h4>
+<p>Establishing ICT empowerment hubs, coding and digital skills bootcamps, and youth enterprise support across the ward.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
     with v2:
-        st.markdown("""
-            <div class="light-card">
-                <h4>02. Agricultural Resilience</h4>
-                <p>Strengthening farmer cooperatives, water harvesting, and fair market linkages using sound financial planning.</p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>02. Agricultural Resilience</h4>
+<p>Strengthening farmer cooperatives, water harvesting, and fair market linkages using sound financial planning.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
     with v3:
-        st.markdown("""
-            <div class="light-card">
-                <h4>03. Security &amp; Infrastructure</h4>
-                <p>Championing passable rural roads, reliable water points, solar lighting, and human-wildlife conflict mitigation.</p>
-            </div>
-        """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>03. Security &amp; Infrastructure</h4>
+<p>Championing passable rural roads, reliable water points, solar lighting, and human-wildlife conflict mitigation.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------------------------------
 # ACHIEVEMENTS PAGE
@@ -720,20 +745,26 @@ elif active == "Achievements":
 
     a1, a2 = st.columns(2)
     with a1:
-        st.markdown("""
-            <div class="light-card">
-                <h4>Technology &amp; Digital Systems</h4>
-                <p>Built and deployed custom software tools, financial analytics solutions, and digital platforms supporting organizations and entrepreneurs.</p>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>Technology &amp; Digital Systems</h4>
+<p>Built and deployed custom software tools, financial analytics solutions, and digital platforms supporting organizations and entrepreneurs.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
     with a2:
-        st.markdown("""
-            <div class="light-card">
-                <h4>Student Mentorship &amp; Community Support</h4>
-                <p>Led academic guidance and motivational programs for primary and secondary students across Naiborom and Ol Moran Ward.</p>
-            </div>
-        """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(
+"""
+<div class="light-card">
+<h4>Student Mentorship &amp; Community Support</h4>
+<p>Led academic guidance and motivational programs for primary and secondary students across Naiborom and Ol Moran Ward.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------------------------------
 # EVENTS PAGE
@@ -742,13 +773,16 @@ elif active == "Events":
     st.markdown('<div class="page-container">', unsafe_allow_html=True)
     st.markdown('<div class="section-kicker">COMMUNITY ENGAGEMENT</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-heading">Ward Forums &amp; Outreach</div>', unsafe_allow_html=True)
-    st.markdown("""
-        <div class="light-card">
-            <h4>Ol Moran Ward Listening &amp; Youth Empowerment Forums</h4>
-            <p>Interactive community sessions across Naiborom, Kio, and Wangwachi focused on agriculture, youth skills, and local infrastructure priorities. Visit the Gallery tab to view highlights.</p>
-        </div>
-    """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown(
+"""
+<div class="light-card">
+<h4>Ol Moran Ward Listening &amp; Youth Empowerment Forums</h4>
+<p>Interactive community sessions across Naiborom, Kio, and Wangwachi focused on agriculture, youth skills, and local infrastructure priorities. Visit the Gallery tab to view highlights.</p>
+</div>
+""",
+unsafe_allow_html=True,
+)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------------------------------
 # GALLERY PAGE
@@ -764,7 +798,7 @@ elif active == "Gallery":
             st.markdown('<div class="cta-gold">', unsafe_allow_html=True)
             if st.button("+ Upload Photos", use_container_width=True):
                 navigate_to("Admin")
-            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
     gallery_items = load_gallery()
 
@@ -777,14 +811,15 @@ elif active == "Gallery":
             if os.path.exists(img_path):
                 with cols[idx % 3]:
                     st.image(img_path, use_container_width=True)
-                    st.markdown(f"""
-                        <div style="background:#ffffff; padding:0.85rem 1rem; border-radius:0 0 10px 10px; border:1px solid #e5e7eb; border-top:none; margin-bottom:1.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.04);">
-                            <div style="color:#b8860b; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">{item.get('category', 'Gallery')}</div>
-                            <div style="color:#111827; font-weight:700; font-size:0.95rem; margin-top:2px;">{item['caption']}</div>
-                            <div style="color:#6b7280; font-size:0.78rem; margin-top:4px;">{item['uploaded_at']}</div>
-                        </div>
-                    """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+                    st.markdown(
+f'<div style="background:#ffffff; padding:0.85rem 1rem; border-radius:0 0 10px 10px; border:1px solid #e5e7eb; border-top:none; margin-bottom:1.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.04);">'
+f'<div style="color:#b8860b; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">{item.get("category", "Gallery")}</div>'
+f'<div style="color:#111827; font-weight:700; font-size:0.95rem; margin-top:2px;">{item["caption"]}</div>'
+f'<div style="color:#6b7280; font-size:0.78rem; margin-top:4px;">{item["uploaded_at"]}</div>'
+f'</div>',
+unsafe_allow_html=True,
+)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------------------------------
 # CONTACT / REGISTER PAGE
@@ -804,7 +839,7 @@ elif active == "Contact":
                 st.success(f"Thank you, {name}! Your registration has been received.")
             else:
                 st.warning("Please provide your name and phone number.")
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------------------------------
 # ADMIN PORTAL
@@ -883,4 +918,4 @@ elif active == "Admin":
                     if st.button("Delete", key=f"del_{item['id']}", use_container_width=True):
                         delete_image(item["id"])
                         st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
